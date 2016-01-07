@@ -11,9 +11,11 @@
 /* ************************************************************************** */
 
 #include "ft_printf.h"
+#include <stdio.h>
 
 int	main(void)
 {
-	ft_printf("Hello%world%");
+	ft_printf("Hello%6.3d\n", 42);
+	printf("Hello%6.3d\n", 42);
 	return (0);
 }

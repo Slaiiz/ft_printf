@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include "ft_printf.h"
+#include <stdio.h>
 
 void		flush_to_stdout(t_buffer *in)
 {
@@ -28,9 +29,11 @@ void		flush_to_stdout(t_buffer *in)
 
 void		format_argument(t_buffer *in, const char **s, size_t arg)
 {
-	int	flags;
+	static t_format	format;
 
-	flags = parse_flags(s);
+	get_flags(&format, s);
+	get_precision(&format, s);
+	
 	return ;
 }
 
@@ -71,7 +74,7 @@ int			ft_printf(const char *format, ...)
 		if (ch == '%')
 		{
 			flush_to_stdout(&buffer);
-			format_argument(&buffer, &format, va_arg(size_t, argp));
+			format_argument(&buffer, &format, va_arg(argp, size_t));
 		}
 		else
 			write_to_buffer(&buffer, APPEND, ch);
