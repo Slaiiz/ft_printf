@@ -75,17 +75,17 @@ void		get_modifier(t_format *out, const char **s, size_t *arg)
 	int			len;
 
 	data = *s;
-	if ((len = seek_string(s, "hh")) > 0)
+	if ((len = seek_string(s, "hh")))
 		*arg &= (1 << sizeof(char)) - 1;
-	else if ((len = seek_string(s, "h")) > 0)
+	else if ((len = seek_string(s, "h")))
 		*arg &= (1 << sizeof(short)) - 1;
-	else if ((len = seek_string(s, "ll")) > 0)
+	else if ((len = seek_string(s, "ll")))
 		*arg &= (1 << sizeof(long long)) - 1;
-	else if ((len = seek_string(s, "l")) > 0)
+	else if ((len = seek_string(s, "l")))
 		*arg &= (1 << sizeof(long)) - 1;
-	else if ((len = seek_string(s, "j")) > 0)
+	else if ((len = seek_string(s, "j")))
 		*arg &= (1 << sizeof(intmax_t)) - 1;
-	else if ((len = seek_string(s, "z")) > 0)
+	else if ((len = seek_string(s, "z")))
 		*arg &= (1 << sizeof(size_t)) - 1;
 	else
 	{
@@ -98,28 +98,28 @@ void		get_modifier(t_format *out, const char **s, size_t *arg)
 
 void		get_conversion(t_format *out, const char **s)
 {
-	if (seek_string(s, "s") > 0)
+	if (seek_string(s, "s"))
 		out->conversion = CONV_STR;
-	else if (seek_string(s, "S") > 0)
+	else if (seek_string(s, "S"))
 		out->conversion = CONV_WSTR;
-	else if (seek_string(s, "p") > 0)
+	else if (seek_string(s, "p"))
 		out->conversion = CONV_PTR;
-	else if ((seek_string(s, "d")
-		+ seek_string(s, "D")
-		+ seek_string(s, "i")) > 0)
+	else if (seek_string(s, "d")
+		|| seek_string(s, "D")
+		|| seek_string(s, "i"))
 		out->conversion = CONV_INT;
-	else if ((seek_string(s, "o")
-		+ seek_string(s, "O")) > 0)
+	else if (seek_string(s, "o")
+		|| seek_string(s, "O"))
 		out->conversion = CONV_OCT;
-	else if ((seek_string(s, "u")
-		+ seek_string(s, "U")) > 0)
+	else if (seek_string(s, "u")
+		|| seek_string(s, "U"))
 		out->conversion = CONV_UINT;
-	else if (seek_string(s, "x") > 0)
+	else if (seek_string(s, "x"))
 		out->conversion = CONV_HEXL;
-	else if (seek_string(s, "X") > 0)
+	else if (seek_string(s, "X"))
 		out->conversion = CONV_HEXU;
-	else if ((seek_string(s, "c")
-		+ seek_string(s, "C")) > 0)
+	else if (seek_string(s, "c")
+		|| seek_string(s, "C"))
 		out->conversion = CONV_CHAR;
 	return ;
 }
