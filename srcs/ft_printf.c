@@ -33,7 +33,8 @@ void		format_argument(t_buffer *in, const char **s, size_t arg)
 
 	get_flags(&format, s);
 	get_precision(&format, s);
-	
+	get_modifier(&format, s, &arg);
+	get_conversion(&format, s, &arg);
 	return ;
 }
 

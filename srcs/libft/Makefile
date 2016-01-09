@@ -1,7 +1,7 @@
 CC=gcc
 INC=libft.h
 NAME=libft.a
-CFLAGS=-Wall -Wextra -Werror 
+CFLAGS=-Wall -Wextra -Werror
 SRCS=ft_atoi.c        ft_bzero.c    ft_isalnum.c   ft_isalpha.c    ft_isascii.c\
      ft_isdigit.c     ft_isprint.c  ft_itoa.c      ft_lstadd.c     ft_lstdel.c\
      ft_lstdelone.c   ft_lstiter.c  ft_lstmap.c    ft_lstnew.c     ft_memalloc.c\
@@ -16,7 +16,7 @@ SRCS=ft_atoi.c        ft_bzero.c    ft_isalnum.c   ft_isalpha.c    ft_isascii.c\
      ft_strtrim.c     ft_tolower.c  ft_toupper.c   ft_min.c        ft_max.c\
      ft_itoa_base.c   ft_isblank.c  ft_chrrep.c    ft_strrev.c     ft_rot13.c\
      ft_putnbr_base.c ft_printmem.c ft_nbrlen.c    ft_realloc.c    ft_arraydel.c\
-     ft_abs.c
+     ft_abs.c         ft_strndup.c
 SRCS:=$(SRCS:	= )
 OBJS=$(SRCS:.c=.o)
 

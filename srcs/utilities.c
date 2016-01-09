@@ -12,7 +12,21 @@
 
 #include "ft_printf.h"
 
-void	get_flags(t_format *out, const char **s)
+static int	seek_string(const char **a, const char *b)
+{
+	char	*str
+	int		len;
+
+	str = *a;
+	while (*b != '\0')
+		if (*a++ != *b++)
+			return (0);
+	len = (int)(a - str);
+	*a = str;
+	return (len);
+}
+
+void		get_flags(t_format *out, const char **s)
 {
 	char	flags;
 	char	ch;
@@ -32,12 +46,12 @@ void	get_flags(t_format *out, const char **s)
 			flags |= FLAG_BLANK;
 		else
 			break ;
-		++*s;
+		*s++;
 	}
 	out->flags = flags;
 }
 
-void	get_precision(t_format *out, const char **s)
+void		get_precision(t_format *out, const char **s)
 {
 	const char	*data;
 
@@ -45,7 +59,6 @@ void	get_precision(t_format *out, const char **s)
 	while (ft_isdigit(*data))
 		data++;
 	out->fieldwidth = ft_atoi(*s);
-	*s = data;
 	if (*data++ != '.')
 		return ;
 	*s = data;
@@ -54,4 +67,31 @@ void	get_precision(t_format *out, const char **s)
 	out->precision = ft_atoi(*s);
 	*s = data;
 	return ;
+}
+
+void		get_modifier(t_format *out, const char **s, size_t *arg)
+{
+	char	*data;
+	int		len;
+
+	data = *s;
+	if ((len = seek_string(s, "hh")) > 0)
+		*arg &= (1 << sizeof(char)) - 1;
+	else if ((len = seek_string(s, "h")) > 0)
+		*arg &= (1 << sizeof(short)) - 1;
+	else if ((len = seek_string(s, "ll")) > 0)
+		*arg &= (1 << sizeof(long long)) - 1;
+	else if ((len = seek_string(s, "l")) > 0)
+		*arg &= (1 << sizeof(long)) - 1;
+	else if ((len = seek_string(s, "j")) > 0)
+		*arg &= (1 << sizeof(intmax_t)) - 1;
+	else if ((len = seek_string(s, "z")) > 0)
+		*arg &= (1 << sizeof(size_t)) - 1;
+	out->modifier = ft_strndup(data, len);
+	return ;
+}
+
+void		get_conversion(t_format *out, const char **s, size_t *arg)
+{
+
 }
