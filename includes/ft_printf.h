@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #ifndef FT_PRINTF_H
+# define FT_PRINTF_H
 
 # include <stdarg.h>
 # include <unistd.h>
@@ -22,26 +23,39 @@
 # define FLAG_SIGN	0x08
 # define FLAG_NEGF	0x10
 
+# define CONV_INT	0x001
+# define CONV_STR	0x002
+# define CONV_WSTR	0x004
+# define CONV_PTR	0x008
+# define CONV_OCT	0x010
+# define CONV_UINT	0x020
+# define CONV_HEXL	0x040
+# define CONV_HEXU	0x080
+# define CONV_CHAR	0x100
+
 # define APPEND		1
 # define PREPEND	2
 
-typedef struct	s_buffer
+typedef struct		s_buffer
 {
-	char		*data;
-	size_t		size;
-}				t_buffer;
+	char			*data;
+	size_t			size;
+}					t_buffer;
 
-typedef struct	s_format
+typedef struct		s_format
 {
-	size_t		fieldwidth;
-	size_t		precision;
-	char		modifier;
-	char		convert;
-	char		flags;
-}				t_format;
+	size_t			fieldwidth;
+	size_t			precision;
+	unsigned char	*modifier;
+	unsigned short	conversion;
+	unsigned char	flags;
+}					t_format;
 
-int				ft_printf(const char *format, ...);
-void			get_flags(t_format *out, const char **s);
-void			get_precision(t_format *out, const char **s);
+int					ft_printf(const char *format, ...);
+void				write_to_buffer(t_buffer *in, int mode, char *s);
+void				get_flags(t_format *out, const char **s);
+void				get_precision(t_format *out, const char **s);
+void				get_modifier(t_format *out, const char **s, size_t *arg);
+void				get_conversion(t_format *out, const char **s);
 
 #endif

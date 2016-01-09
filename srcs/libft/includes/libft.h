@@ -17,8 +17,11 @@
 # include <string.h>
 # include <unistd.h>
 
-# define BSIZE_INT	(8 * sizeof(int))
-# define SIGN_BIT	(1 << (BSIZE_INT - 1))
+# define BSIZE_SIZE_T		(8 * sizeof(size_t))
+# define SIGN_BIT_SIZE_T	(1 << (BSIZE_SIZE_T - 1))
+
+# define BSIZE_INT		(8 * sizeof(int))
+# define SIGN_BIT_INT		(1 << (BSIZE_INT - 1))
 
 typedef struct		s_list
 {
@@ -48,6 +51,8 @@ void				ft_lstadd(t_list **alst, t_list *new);
 void				ft_lstiter(t_list *lst, void (*f)(t_list *elem));
 void				ft_printmem(void *addr, size_t len);
 void				ft_arraydel(void **array);
+void				ft_strupcase(char *s);
+void				ft_strlowcase(char *s);
 void				*ft_memset(void *b, int c, size_t len);
 void				*ft_memcpy(void *dst, const void *src, size_t n);
 void				*ft_memccpy(void *dst, const void *src, int c, size_t n);

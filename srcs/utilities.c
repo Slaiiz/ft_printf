@@ -14,14 +14,14 @@
 
 static int	seek_string(const char **a, const char *b)
 {
-	char	*str
-	int		len;
+	const char	*str;
+	int			len;
 
 	str = *a;
 	while (*b != '\0')
-		if (*a++ != *b++)
+		if (*str++ != *b++)
 			return (0);
-	len = (int)(a - str);
+	len = (int)(str - *a);
 	*a = str;
 	return (len);
 }
@@ -46,7 +46,7 @@ void		get_flags(t_format *out, const char **s)
 			flags |= FLAG_BLANK;
 		else
 			break ;
-		*s++;
+		(*s)++;
 	}
 	out->flags = flags;
 }
@@ -71,8 +71,8 @@ void		get_precision(t_format *out, const char **s)
 
 void		get_modifier(t_format *out, const char **s, size_t *arg)
 {
-	char	*data;
-	int		len;
+	const char	*data;
+	int			len;
 
 	data = *s;
 	if ((len = seek_string(s, "hh")) > 0)
@@ -87,11 +87,39 @@ void		get_modifier(t_format *out, const char **s, size_t *arg)
 		*arg &= (1 << sizeof(intmax_t)) - 1;
 	else if ((len = seek_string(s, "z")) > 0)
 		*arg &= (1 << sizeof(size_t)) - 1;
+	else
+	{
+		out->modifier = "none";
+		return ;
+	}
 	out->modifier = ft_strndup(data, len);
 	return ;
 }
 
-void		get_conversion(t_format *out, const char **s, size_t *arg)
+void		get_conversion(t_format *out, const char **s)
 {
-
+	if (seek_string(s, "s") > 0)
+		out->conversion = CONV_STR;
+	else if (seek_string(s, "S") > 0)
+		out->conversion = CONV_WSTR;
+	else if (seek_string(s, "p") > 0)
+		out->conversion = CONV_PTR;
+	else if ((seek_string(s, "d")
+		+ seek_string(s, "D")
+		+ seek_string(s, "i")) > 0)
+		out->conversion = CONV_INT;
+	else if ((seek_string(s, "o")
+		+ seek_string(s, "O")) > 0)
+		out->conversion = CONV_OCT;
+	else if ((seek_string(s, "u")
+		+ seek_string(s, "U")) > 0)
+		out->conversion = CONV_UINT;
+	else if (seek_string(s, "x") > 0)
+		out->conversion = CONV_HEXL;
+	else if (seek_string(s, "X") > 0)
+		out->conversion = CONV_HEXU;
+	else if ((seek_string(s, "c")
+		+ seek_string(s, "C")) > 0)
+		out->conversion = CONV_CHAR;
+	return ;
 }

@@ -3,7 +3,7 @@
 /*                                                        :::      ::::::::   */
 /*   ft_itoa.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vchesnea <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: vchesnea <vchesnea@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/11/25 13:28:38 by vchesnea          #+#    #+#             */
 /*   Updated: 2015/12/04 16:46:45 by vchesnea         ###   ########.fr       */
@@ -20,9 +20,9 @@ char	*ft_itoa(int n)
 	unsigned int	count;
 	char			*out;
 
-	if (n == SIGN_BIT)
+	if (n == SIGN_BIT_INT)
 		return (ft_strdup("-2147483648"));
-	if ((negative = n & SIGN_BIT))
+	if ((negative = n & SIGN_BIT_INT))
 		n = -n;
 	count = 0;
 	while (1)

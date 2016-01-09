@@ -18,7 +18,7 @@ char	*ft_strsub(char const *s, unsigned int start, size_t len)
 	char const		*tmp;
 	char			*buf;
 
-	if ((start & SIGN_BIT) | (len & SIGN_BIT))
+	if ((start & SIGN_BIT_INT) | (len & SIGN_BIT_INT))
 		return (NULL);
 	while (start-- && *s != '\0')
 		s++;

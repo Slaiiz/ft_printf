@@ -1,20 +1,22 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   test.c                                             :+:      :+:    :+:   */
+/*   ft_strlowcase.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: vchesnea <vchesnea@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2016/00/04 14:11:48 by vchesnea          #+#    #+#             */
-/*   Updated: 2016/00/04 14:11:48 by vchesnea         ###   ########.fr       */
+/*   Created: 2016/00/09 17:30:21 by vchesnea          #+#    #+#             */
+/*   Updated: 2016/00/09 17:30:21 by vchesnea         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "ft_printf.h"
-#include <stdio.h>
-
-int	main(void)
+void	ft_strlowcase(char *s)
 {
-	ft_printf("Hello%0+6.3hhXPouet%\n", 42);
-	return (0);
+	while (*s != '\0')
+	{
+		if (ft_isalpha(*s))
+			*s |= 32;
+		s++;
+	}
+	return ;
 }

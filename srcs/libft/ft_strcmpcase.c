@@ -1,20 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   test.c                                             :+:      :+:    :+:   */
+/*   ft_strcmpcase.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vchesnea <vchesnea@student.42.fr>          +#+  +:+       +#+        */
+/*   By: vchesnea <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2016/00/04 14:11:48 by vchesnea          #+#    #+#             */
-/*   Updated: 2016/00/04 14:11:48 by vchesnea         ###   ########.fr       */
+/*   Created: 2015/11/24 14:32:43 by vchesnea          #+#    #+#             */
+/*   Updated: 2015/12/02 18:26:06 by vchesnea         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "ft_printf.h"
-#include <stdio.h>
+#include "libft.h"
 
-int	main(void)
+int	ft_strcmpcase(const char *s1, const char *s2)
 {
-	ft_printf("Hello%0+6.3hhXPouet%\n", 42);
-	return (0);
+	while (*s1 != '\0')
+	{
+		if (*s1 & -33 == *s2 & -33)
+		{
+			s1++;
+			s2++;
+			continue ;
+		}
+		break ;
+	}
+	return ((unsigned char)*s1 - (unsigned char)*s2);
 }

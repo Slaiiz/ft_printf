@@ -21,7 +21,7 @@ char	*ft_itoa_base(int n, int base)
 	char			*out;
 
 	base = ft_min(ft_max(base, 2), 16);
-	negative = n & SIGN_BIT;
+	negative = n & SIGN_BIT_INT;
 	if (negative)
 		n = -n;
 	count = 0;
