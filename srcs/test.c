@@ -11,10 +11,9 @@
 /* ************************************************************************** */
 
 #include "ft_printf.h"
-#include <stdio.h>
 
 int	main(void)
 {
-	ft_printf("Hello\n%#-6.3hhx\nPouet\n", 42);
+	ft_printf("Hello\n%#6.8hx\nPouet\n", (unsigned short)257);
 	return (0);
 }

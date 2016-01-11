@@ -11,7 +11,6 @@
 /* ************************************************************************** */
 
 #include "ft_printf.h"
-#include <stdio.h>
 
 void		flush_to_stdout(t_buffer *in)
 {
@@ -33,16 +32,16 @@ void		format_argument(t_buffer *in, const char **s, size_t arg)
 	ft_bzero(&format, sizeof(t_format));
 	get_flags(&format, s);
 	get_precision(&format, s);
-	get_modifier(&format, s, &arg);
+	get_modifier(&format, s);
 	get_conversion(&format, s);
 	if (format.conversion & (CONV_OCT | CONV_INT | CONV_UINT))
-		display_as_dec(in, &format, arg);
+		display_as_dec(in, &format, arg & format.modifier);
 	else if (format.conversion & (CONV_HEXL | CONV_HEXU))
-		display_as_hex(in, &format, arg);
-//	else if (format.conversion & CONV_PTR)
-//		display_as_ptr(in, &format, arg);
-//	else if (format.conversion & (CONV_CHAR | CONV_STR | CONV_WSTR))
-//		display_as_str(in, &format, arg);
+		display_as_hex(in, &format, arg & format.modifier);
+	else if (format.conversion & CONV_PTR)
+		display_as_ptr(in, &format, arg);
+	else if (format.conversion & (CONV_CHAR | CONV_STR | CONV_WSTR))
+		display_as_str(in, &format, arg);
 	return ;
 }
 
@@ -85,13 +84,10 @@ int			ft_printf(const char *format, ...)
 	va_start(argp, format);
 	while (*format != '\0')
 	{
-		if (*format++ == '%')
-		{
-			flush_to_stdout(&buffer);
+		if (*format == '%' && ++format)
 			format_argument(&buffer, &format, va_arg(argp, size_t));
-		}
 		else
-			write_to_buffer(&buffer, APPEND, format - 1, 1);
+			write_to_buffer(&buffer, APPEND, format++, 1);
 	}
 	flush_to_stdout(&buffer);
 	return (written);

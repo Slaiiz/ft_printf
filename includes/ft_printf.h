@@ -46,7 +46,7 @@ typedef struct	s_format
 {
 	size_t		fieldwidth;
 	size_t		precision;
-	char		*modifier;
+	size_t		modifier;
 	short		conversion;
 	char		flags;
 }				t_format;
@@ -55,7 +55,7 @@ int				ft_printf(const char *format, ...);
 void			write_to_buffer(t_buffer *in, int mode, const char *s, int n);
 void			get_flags(t_format *out, const char **s);
 void			get_precision(t_format *out, const char **s);
-void			get_modifier(t_format *out, const char **s, size_t *arg);
+void			get_modifier(t_format *out, const char **s);
 void			get_conversion(t_format *out, const char **s);
 void			display_as_dec(t_buffer *buf, t_format *in, size_t arg);
 void			display_as_hex(t_buffer *buf, t_format *in, size_t arg);

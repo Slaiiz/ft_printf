@@ -11,7 +11,6 @@
 /* ************************************************************************** */
 
 #include "ft_printf.h"
-#include <stdio.h>
 
 static int	seek_string(const char **a, const char *b)
 {
@@ -70,30 +69,20 @@ void		get_precision(t_format *out, const char **s)
 	return ;
 }
 
-void		get_modifier(t_format *out, const char **s, size_t *arg)
+void		get_modifier(t_format *out, const char **s)
 {
-	const char	*data;
-	int			len;
-
-	data = *s;
-	if ((len = seek_string(s, "hh")))
-		*arg &= 0x00000000000000FF;
-	else if ((len = seek_string(s, "h")))
-		*arg &= 0x000000000000FFFF;
-	else if ((len = seek_string(s, "ll")))
-		*arg &= 0xFFFFFFFFFFFFFFFF;
-	else if ((len = seek_string(s, "l")))
-		*arg &= 0xFFFFFFFFFFFFFFFF;
-	else if ((len = seek_string(s, "j")))
-		*arg &= 0x00000000FFFFFFFF;
-	else if ((len = seek_string(s, "z")))
-		*arg &= 0xFFFFFFFFFFFFFFFF;
-	else
-	{
-		out->modifier = "none";
-		return ;
-	}
-	out->modifier = ft_strndup(data, len);
+	if (seek_string(s, "hh"))
+		out->modifier = 0x00000000000000FF;
+	else if (seek_string(s, "h"))
+		out->modifier = 0x000000000000FFFF;
+	else if (seek_string(s, "ll"))
+		out->modifier = 0xFFFFFFFFFFFFFFFF;
+	else if (seek_string(s, "l"))
+		out->modifier = 0xFFFFFFFFFFFFFFFF;
+	else if (seek_string(s, "j"))
+		out->modifier = 0x00000000FFFFFFFF;
+	else if (seek_string(s, "z"))
+		out->modifier = 0xFFFFFFFFFFFFFFFF;
 	return ;
 }
 
