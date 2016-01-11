@@ -10,13 +10,18 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "libft.h"
+
 char	*ft_strupcase(char *s)
 {
+	char	*tmp;
+
+	tmp = s;
 	while (*s != '\0')
 	{
 		if (ft_isalpha(*s))
 			*s &= -33;
 		s++;
 	}
-	return ;
+	return (tmp);
 }

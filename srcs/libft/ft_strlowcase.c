@@ -10,13 +10,18 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-void	ft_strlowcase(char *s)
+#include "libft.h"
+
+char	*ft_strlowcase(char *s)
 {
+	char	*tmp;
+
+	tmp = s;
 	while (*s != '\0')
 	{
 		if (ft_isalpha(*s))
 			*s |= 32;
 		s++;
 	}
-	return ;
+	return (tmp);
 }

@@ -36,26 +36,30 @@
 # define APPEND		1
 # define PREPEND	2
 
-typedef struct		s_buffer
+typedef struct	s_buffer
 {
-	char			*data;
-	size_t			size;
-}					t_buffer;
+	char		*data;
+	size_t		size;
+}				t_buffer;
 
-typedef struct		s_format
+typedef struct	s_format
 {
-	size_t			fieldwidth;
-	size_t			precision;
-	unsigned char	*modifier;
-	unsigned short	conversion;
-	unsigned char	flags;
-}					t_format;
+	size_t		fieldwidth;
+	size_t		precision;
+	char		*modifier;
+	short		conversion;
+	char		flags;
+}				t_format;
 
-int					ft_printf(const char *format, ...);
-void				write_to_buffer(t_buffer *in, int mode, char *s);
-void				get_flags(t_format *out, const char **s);
-void				get_precision(t_format *out, const char **s);
-void				get_modifier(t_format *out, const char **s, size_t *arg);
-void				get_conversion(t_format *out, const char **s);
+int				ft_printf(const char *format, ...);
+void			write_to_buffer(t_buffer *in, int mode, const char *s, int n);
+void			get_flags(t_format *out, const char **s);
+void			get_precision(t_format *out, const char **s);
+void			get_modifier(t_format *out, const char **s, size_t *arg);
+void			get_conversion(t_format *out, const char **s);
+void			display_as_dec(t_buffer *buf, t_format *in, size_t arg);
+void			display_as_hex(t_buffer *buf, t_format *in, size_t arg);
+void			display_as_ptr(t_buffer *buf, t_format *in, size_t arg);
+void			display_as_str(t_buffer *buf, t_format *in, size_t arg);
 
 #endif

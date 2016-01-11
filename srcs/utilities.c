@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include "ft_printf.h"
+#include <stdio.h>
 
 static int	seek_string(const char **a, const char *b)
 {
@@ -76,17 +77,17 @@ void		get_modifier(t_format *out, const char **s, size_t *arg)
 
 	data = *s;
 	if ((len = seek_string(s, "hh")))
-		*arg &= (1 << sizeof(char)) - 1;
+		*arg &= 0x00000000000000FF;
 	else if ((len = seek_string(s, "h")))
-		*arg &= (1 << sizeof(short)) - 1;
+		*arg &= 0x000000000000FFFF;
 	else if ((len = seek_string(s, "ll")))
-		*arg &= (1 << sizeof(long long)) - 1;
+		*arg &= 0xFFFFFFFFFFFFFFFF;
 	else if ((len = seek_string(s, "l")))
-		*arg &= (1 << sizeof(long)) - 1;
+		*arg &= 0xFFFFFFFFFFFFFFFF;
 	else if ((len = seek_string(s, "j")))
-		*arg &= (1 << sizeof(intmax_t)) - 1;
+		*arg &= 0x00000000FFFFFFFF;
 	else if ((len = seek_string(s, "z")))
-		*arg &= (1 << sizeof(size_t)) - 1;
+		*arg &= 0xFFFFFFFFFFFFFFFF;
 	else
 	{
 		out->modifier = "none";

@@ -1,7 +1,7 @@
 NAME  =	libftprintf.a
 CC    =	gcc
-#CFLAGS=	-Wall -Wextra -Werror
-SRCS  =	ft_printf.c	utilities.c
+CFLAGS=	-Wall -Wextra -Werror
+SRCS  =	ft_printf.c	utilities.c display.c
 OBJS  =	$(subst .c,.o,$(SRCS))
 
 all: libft.a $(NAME)

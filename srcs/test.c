@@ -15,6 +15,6 @@
 
 int	main(void)
 {
-	ft_printf("Hello%0+6.3hhXPouet%\n", 42);
+	ft_printf("Hello\n%#-6.3hhx\nPouet\n", 42);
 	return (0);
 }
