@@ -35,9 +35,9 @@ void		format_argument(t_buffer *in, const char **s, size_t arg)
 	get_modifier(&format, s);
 	get_conversion(&format, s);
 	if (format.conversion & (CONV_OCT | CONV_INT | CONV_UINT))
-		display_as_dec(in, &format, arg & format.modifier);
+		display_as_dec(in, &format, arg);
 	else if (format.conversion & (CONV_HEXL | CONV_HEXU))
-		display_as_hex(in, &format, arg & format.modifier);
+		display_as_hex(in, &format, arg);
 	else if (format.conversion & CONV_PTR)
 		display_as_ptr(in, &format, arg);
 	else if (format.conversion & (CONV_CHAR | CONV_STR | CONV_WSTR))

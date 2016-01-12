@@ -59,12 +59,13 @@ void		get_precision(t_format *out, const char **s)
 	while (ft_isdigit(*data))
 		data++;
 	out->fieldwidth = ft_atoi(*s);
-	if (*data++ != '.')
-		return ;
-	*s = data;
-	while (ft_isdigit(*data))
-		data++;
-	out->precision = ft_atoi(*s);
+	if (*data == '.')
+	{
+		*s = ++data;
+		while (ft_isdigit(*data))
+			data++;
+		out->precision = ft_atoi(*s);
+	}
 	*s = data;
 	return ;
 }
@@ -82,6 +83,8 @@ void		get_modifier(t_format *out, const char **s)
 	else if (seek_string(s, "j"))
 		out->modifier = 0x00000000FFFFFFFF;
 	else if (seek_string(s, "z"))
+		out->modifier = 0xFFFFFFFFFFFFFFFF;
+	else
 		out->modifier = 0xFFFFFFFFFFFFFFFF;
 	return ;
 }
