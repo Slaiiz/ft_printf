@@ -14,14 +14,10 @@
 
 void		flush_to_stdout(t_buffer *in)
 {
-	int	index;
-
-	index = (int)((char*)ft_memchr(in->data, '\0', in->size) - in->data);
-	if (index < 0 || in->data == NULL)
+	if (in->len < 0 || in->data == NULL)
 		return ;
-	write(1, in->data, index);
-	while (index--)
-		*(in->data + index) = '\0';
+	write(1, in->data, in->len);
+	in->len = 0;
 	return ;
 }
 
@@ -45,33 +41,34 @@ void		format_argument(t_buffer *in, const char **s, size_t arg)
 	return ;
 }
 
-void		write_to_buffer(t_buffer *in, int mode, const char *s, int n)
+void		write_to_buffer(t_buffer *in, int mode, const char *s)
 {
-	char	*pos;
 	char	*new;
 
-	if ((pos = (char*)ft_memchr(in->data, '\0', in->size)) == NULL)
+	if (*s == '\0')
+		return ;
+	if (in->len == in->size)
 	{
-		if ((new = ft_memalloc(sizeof(char) * (in->size + 32))) == NULL)
+		if ((new = malloc(sizeof(char) * (in->size + 32))) == NULL)
 			return ;
-		pos = new + in->size;
 		if (in->data != NULL)
 		{
 			ft_memcpy(new, in->data, in->size);
 			free(in->data);
 		}
-		in->size += 32;
 		in->data = new;
+		in->size += 32;
 	}
 	if (mode & PREPEND)
 	{
-		ft_memmove(in->data + 1, in->data, in->size);
-		*(in->data) = *s++;
+		ft_memmove(in->data + 1, in->data, in->len);
+		*(in->data + 0) = *s;
 	}
 	else if (mode & APPEND)
-		*(pos) = *s++;
-	if (--n > 0)
-		write_to_buffer(in, mode, s, n);
+		*(in->data + in->len) = *s;
+	in->len++;
+	write_to_buffer(in, mode, ++s);
+	return ;
 }
 
 int			ft_printf(const char *format, ...)
@@ -87,7 +84,7 @@ int			ft_printf(const char *format, ...)
 		if (*format == '%' && ++format)
 			format_argument(&buffer, &format, va_arg(argp, size_t));
 		else
-			write_to_buffer(&buffer, APPEND, format++, 1);
+			write_to_buffer(&buffer, APPEND, format++);
 	}
 	flush_to_stdout(&buffer);
 	return (written);

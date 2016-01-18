@@ -49,6 +49,7 @@ void		get_flags(t_format *out, const char **s)
 		(*s)++;
 	}
 	out->flags = flags;
+	return ;
 }
 
 void		get_precision(t_format *out, const char **s)
@@ -81,11 +82,11 @@ void		get_modifier(t_format *out, const char **s)
 	else if (seek_string(s, "l"))
 		out->modifier = 0xFFFFFFFFFFFFFFFF;
 	else if (seek_string(s, "j"))
-		out->modifier = 0x00000000FFFFFFFF;
+		out->modifier = 0xFFFFFFFFFFFFFFFF;
 	else if (seek_string(s, "z"))
 		out->modifier = 0xFFFFFFFFFFFFFFFF;
 	else
-		out->modifier = 0xFFFFFFFFFFFFFFFF;
+		out->modifier = 0x00000000FFFFFFFF;
 	return ;
 }
 

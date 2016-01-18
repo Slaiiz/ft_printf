@@ -40,6 +40,7 @@ typedef struct	s_buffer
 {
 	char		*data;
 	size_t		size;
+	size_t		len;
 }				t_buffer;
 
 typedef struct	s_format

@@ -15,8 +15,9 @@
 int	main(void)
 {
 	ft_printf("Users: %d | Server: %s\n", 42, "Horizon");
-	ft_printf("%p\t%02hhx %02hhx %02hhx %02hhx %02hhx %02hhx %02hhx %02hhx\n", 0x401000, 42, 63, 92, 0, 0, 255, 254, 12);
+//	ft_printf("%p\t%02lx %02hhx %02hhx %02hhx %02hhx %02hhx %02hhx %02hhx\n", 0x401000, 42, 63, 92, 0, 0, 255, 254, 12);
 //	ft_printf("%-012s\n", "Hello");
 //	ft_printf("Hello\n%#6.8hx\nPouet\n", (unsigned short)257);
+	ft_printf("%04x\n", 255);
 	return (0);
 }
