@@ -12,20 +12,6 @@
 
 #include "ft_printf.h"
 
-static int	seek_string(const char **a, const char *b)
-{
-	const char	*str;
-	int			len;
-
-	str = *a;
-	while (*b != '\0')
-		if (*str++ != *b++)
-			return (0);
-	len = (int)(str - *a);
-	*a = str;
-	return (len);
-}
-
 void		get_flags(t_format *out, const char **s)
 {
 	char	flags;
@@ -73,17 +59,17 @@ void		get_precision(t_format *out, const char **s)
 
 void		get_modifier(t_format *out, const char **s)
 {
-	if (seek_string(s, "hh"))
+	if (ft_seekstr(s, "hh"))
 		out->modifier = 0x00000000000000FF;
-	else if (seek_string(s, "h"))
+	else if (ft_seekstr(s, "h"))
 		out->modifier = 0x000000000000FFFF;
-	else if (seek_string(s, "ll"))
+	else if (ft_seekstr(s, "ll"))
 		out->modifier = 0xFFFFFFFFFFFFFFFF;
-	else if (seek_string(s, "l"))
+	else if (ft_seekstr(s, "l"))
 		out->modifier = 0xFFFFFFFFFFFFFFFF;
-	else if (seek_string(s, "j"))
+	else if (ft_seekstr(s, "j"))
 		out->modifier = 0xFFFFFFFFFFFFFFFF;
-	else if (seek_string(s, "z"))
+	else if (ft_seekstr(s, "z"))
 		out->modifier = 0xFFFFFFFFFFFFFFFF;
 	else
 		out->modifier = 0x00000000FFFFFFFF;
@@ -92,28 +78,29 @@ void		get_modifier(t_format *out, const char **s)
 
 void		get_conversion(t_format *out, const char **s)
 {
-	if (seek_string(s, "s"))
+	if (ft_seekstr(s, "s"))
 		out->conversion = CONV_STR;
-	else if (seek_string(s, "S"))
+	else if (ft_seekstr(s, "S"))
 		out->conversion = CONV_WSTR;
-	else if (seek_string(s, "p"))
+	else if (ft_seekstr(s, "p"))
 		out->conversion = CONV_PTR;
-	else if (seek_string(s, "d")
-		|| seek_string(s, "D")
-		|| seek_string(s, "i"))
+	else if (ft_seekstr(s, "d")
+		|| ft_seekstr(s, "D")
+		|| ft_seekstr(s, "i"))
 		out->conversion = CONV_INT;
-	else if (seek_string(s, "o")
-		|| seek_string(s, "O"))
+	else if (ft_seekstr(s, "o")
+		|| ft_seekstr(s, "O"))
 		out->conversion = CONV_OCT;
-	else if (seek_string(s, "u")
-		|| seek_string(s, "U"))
+	else if (ft_seekstr(s, "u")
+		|| ft_seekstr(s, "U"))
 		out->conversion = CONV_UINT;
-	else if (seek_string(s, "x"))
+	else if (ft_seekstr(s, "x"))
 		out->conversion = CONV_HEXL;
-	else if (seek_string(s, "X"))
+	else if (ft_seekstr(s, "X"))
 		out->conversion = CONV_HEXU;
-	else if (seek_string(s, "c")
-		|| seek_string(s, "C"))
+	else if (ft_seekstr(s, "c"))
 		out->conversion = CONV_CHAR;
+	else if (ft_seekstr(s, "C"))
+		out->conversion = CONV_WCHAR;
 	return ;
 }

@@ -16,7 +16,7 @@ int	ft_strcmpcase(const char *s1, const char *s2)
 {
 	while (*s1 != '\0')
 	{
-		if (*s1 & -33 == *s2 & -33)
+		if ((*s1 & -33) == (*s2 & -33))
 		{
 			s1++;
 			s2++;

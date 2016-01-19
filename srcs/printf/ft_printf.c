@@ -12,16 +12,19 @@
 
 #include "ft_printf.h"
 
-void		flush_to_stdout(t_buffer *in)
+static size_t	flush_to_stdout(t_buffer *in)
 {
-	if (in->len < 0 || in->data == NULL)
-		return ;
-	write(1, in->data, in->len);
+	size_t		len;
+
+	len = in->len;
+	if (len < 1 || in->data == NULL)
+		return (0);
+	write(1, in->data, len);
 	in->len = 0;
-	return ;
+	return (len);
 }
 
-void		format_argument(t_buffer *in, const char **s, size_t arg)
+static void		format_argument(t_buffer *in, const char **s, size_t arg)
 {
 	t_format	format;
 
@@ -36,17 +39,15 @@ void		format_argument(t_buffer *in, const char **s, size_t arg)
 		display_as_hex(in, &format, arg);
 	else if (format.conversion & CONV_PTR)
 		display_as_ptr(in, &format, arg);
-	else if (format.conversion & (CONV_CHAR | CONV_STR | CONV_WSTR))
+	else if (format.conversion & (CONV_CHAR | CONV_WCHAR | CONV_STR | CONV_WSTR))
 		display_as_str(in, &format, arg);
 	return ;
 }
 
-void		write_to_buffer(t_buffer *in, int mode, const char *s)
+void			write_to_buffer(t_buffer *in, int mode, int len, const char *s)
 {
 	char	*new;
 
-	if (*s == '\0')
-		return ;
 	if (in->len == in->size)
 	{
 		if ((new = malloc(sizeof(char) * (in->size + 32))) == NULL)
@@ -67,25 +68,36 @@ void		write_to_buffer(t_buffer *in, int mode, const char *s)
 	else if (mode & APPEND)
 		*(in->data + in->len) = *s;
 	in->len++;
-	write_to_buffer(in, mode, ++s);
+	if (--len && *s)
+		write_to_buffer(in, mode, len, ++s);
 	return ;
 }
 
-int			ft_printf(const char *format, ...)
+int				ft_printf(const char *format, ...)
 {
 	int				written;
 	static t_buffer	buffer;
+	char			*color;
 	va_list			argp;
 
 	written = 0;
 	va_start(argp, format);
 	while (*format != '\0')
 	{
-		if (*format == '%' && ++format)
+		if (*format == '{' && ++format)
+		{
+			color = get_output_color(&format);
+			if (*format == '}' && ++format)
+				write_to_buffer(&buffer, APPEND, 5, color);
+		}
+		else if (*format == '%' && ++format)
+		{
+			written += flush_to_stdout(&buffer);
 			format_argument(&buffer, &format, va_arg(argp, size_t));
+		}
 		else
-			write_to_buffer(&buffer, APPEND, format++);
+			write_to_buffer(&buffer, APPEND, 1, format++);
 	}
-	flush_to_stdout(&buffer);
+	written += flush_to_stdout(&buffer);
 	return (written);
 }

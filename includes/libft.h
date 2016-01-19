@@ -76,6 +76,7 @@ int					ft_strnequ(char const *s1, char const *s2, size_t n);
 int					ft_min(int a, int b);
 int					ft_max(int a, int b);
 int					ft_abs(int n);
+int					ft_seekstr(const char **a, const char *b);
 size_t				ft_strlen(const char *s);
 size_t				ft_strlcat(char *dst, const char *src, size_t n);
 size_t				ft_nbrlen(int n, int base);

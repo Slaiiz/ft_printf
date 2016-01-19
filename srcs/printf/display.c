@@ -22,16 +22,16 @@ static void	insert_padding(t_buffer *buf, t_format *in, size_t spa, size_t zpa)
 		mode = APPEND;
 	while (in->precision > zpa)
 	{
-		write_to_buffer(buf, APPEND, "0");
+		write_to_buffer(buf, mode, 1, "0");
 		in->precision--;
 		spa++;
 	}
 	while (in->fieldwidth > spa)
 	{
-		if (in->flags & FLAG_ZPAD && !(in->flags & FLAG_ALT))
-			write_to_buffer(buf, mode, "0");
+		if (in->flags & FLAG_ZPAD && !(in->flags & (FLAG_ALT | FLAG_NEGF)))
+			write_to_buffer(buf, mode, 1, "0");
 		else
-			write_to_buffer(buf, mode, " ");
+			write_to_buffer(buf, mode, 1, " ");
 		in->fieldwidth--;
 	}
 	return ;
@@ -49,8 +49,8 @@ void		display_as_dec(t_buffer *buf, t_format *in, size_t arg)
 	if ((out = ft_itoa_base64(arg & in->modifier, base)) == NULL)
 		return ;
 	len = ft_strlen(out);
+	write_to_buffer(buf, APPEND, len, out);
 	insert_padding(buf, in, len, len);
-	write_to_buffer(buf, APPEND, out);
 	return ;
 }
 
@@ -63,14 +63,16 @@ void		display_as_hex(t_buffer *buf, t_format *in, size_t arg)
 		return ;
 	if (in->conversion & CONV_HEXU)
 		ft_strupcase(out);
-	insert_padding(buf, in, 0, len);
+	len = ft_strlen(out);
 	if (in->flags & FLAG_ALT && arg != 0)
 	{
-		write_to_buffer(buf, APPEND, "0x");
-		len += 2;
+		write_to_buffer(buf, APPEND, 2, "0x");
+		insert_padding(buf, in, len + 2, len + 2);
+		write_to_buffer(buf, APPEND, len, out);
+		return ;
 	}
-	insert_padding(buf, in, len, 0);
-	write_to_buffer(buf, APPEND, out);
+	write_to_buffer(buf, APPEND, len, out);
+	insert_padding(buf, in, len, len);
 	return ;
 }
 
@@ -82,22 +84,28 @@ void		display_as_ptr(t_buffer *buf, t_format *in, size_t arg)
 	if ((out = ft_itoa_base64(arg, 16)) == NULL)
 		return ;
 	len = ft_strlen(out);
-	insert_padding(buf, in, len, len);
-	write_to_buffer(buf, APPEND, out);
+	write_to_buffer(buf, APPEND, 2, "0x");
+	write_to_buffer(buf, APPEND, len, out);
+	insert_padding(buf, in, len + 2, len);
 	return ;
 }
 
 void		display_as_str(t_buffer *buf, t_format *in, size_t arg)
 {
-	int	len;
+	int		size;
+	int		len;
 
-	if (in->conversion & CONV_CHAR)
+	size = sizeof(char);
+	if (in->conversion & (CONV_WCHAR | CONV_WSTR))
+		size = sizeof(wchar_t);
+	if (in->conversion & (CONV_CHAR | CONV_WCHAR))
 	{
-		write_to_buffer(buf, APPEND, (char*)arg);
+		write_to_buffer(buf, APPEND, size * 1, (char*)&arg);
+		insert_padding(buf, in, size * 1, 0);
 		return ;
 	}
 	len = ft_strlen((char*)arg);
-	insert_padding(buf, in, len, 0);
-	write_to_buffer(buf, APPEND, (char*)arg);
+	write_to_buffer(buf, APPEND, size * len, (char*)arg);
+	insert_padding(buf, in, size * len, 0);
 	return ;
 }
