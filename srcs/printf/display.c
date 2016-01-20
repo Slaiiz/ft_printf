@@ -11,7 +11,6 @@
 /* ************************************************************************** */
 
 #include "ft_printf.h"
-#include <stdio.h>
 
 static void	insert_padding(t_buffer *buf, t_format *in, size_t spa, size_t zpa)
 {
