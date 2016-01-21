@@ -12,7 +12,7 @@
 
 #include "ft_printf.h"
 
-static void	insert_padding(t_buffer *buf, t_format *in, size_t spa, size_t zpa)
+void		pad_buffer(t_buffer *buf, t_format *in, size_t spa, size_t zpa)
 {
 	int	mode;
 
@@ -27,7 +27,7 @@ static void	insert_padding(t_buffer *buf, t_format *in, size_t spa, size_t zpa)
 	}
 	while (in->fieldwidth > spa)
 	{
-		if (in->flags & FLAG_ZPAD && !(in->flags & (FLAG_ALT | FLAG_NEGF)))
+		if (in->flags & FLAG_ZPAD && ~(in->flags & (FLAG_ALT | FLAG_NEGF)))
 			write_to_buffer(buf, mode, 1, "0");
 		else
 			write_to_buffer(buf, mode, 1, " ");
@@ -48,8 +48,10 @@ void		display_as_dec(t_buffer *buf, t_format *in, size_t arg)
 	if ((out = ft_itoa_base64(arg & in->modifier, base)) == NULL)
 		return ;
 	len = ft_strlen(out);
+	if (in->flags & FLAG_SIGN && *out != '-' && len++)
+		write_to_buffer(buf, APPEND, 1, "+");
 	write_to_buffer(buf, APPEND, len, out);
-	insert_padding(buf, in, len, len);
+	pad_buffer(buf, in, len, len);
 	return ;
 }
 
@@ -65,13 +67,16 @@ void		display_as_hex(t_buffer *buf, t_format *in, size_t arg)
 	len = ft_strlen(out);
 	if (in->flags & FLAG_ALT && arg != 0)
 	{
-		write_to_buffer(buf, APPEND, 2, "0x");
-		insert_padding(buf, in, len + 2, len + 2);
+		if (in->conversion & CONV_HEXU)
+			write_to_buffer(buf, APPEND, 2, "0X");
+		else
+			write_to_buffer(buf, APPEND, 2, "0x");
+		pad_buffer(buf, in, len + 2, len + 2);
 		write_to_buffer(buf, APPEND, len, out);
 		return ;
 	}
 	write_to_buffer(buf, APPEND, len, out);
-	insert_padding(buf, in, len, len);
+	pad_buffer(buf, in, len, len);
 	return ;
 }
 
@@ -85,7 +90,7 @@ void		display_as_ptr(t_buffer *buf, t_format *in, size_t arg)
 	len = ft_strlen(out);
 	write_to_buffer(buf, APPEND, 2, "0x");
 	write_to_buffer(buf, APPEND, len, out);
-	insert_padding(buf, in, len + 2, len);
+	pad_buffer(buf, in, len + 2, len);
 	return ;
 }
 
@@ -100,11 +105,11 @@ void		display_as_str(t_buffer *buf, t_format *in, size_t arg)
 	if (in->conversion & (CONV_CHAR | CONV_WCHAR))
 	{
 		write_to_buffer(buf, APPEND, size * 1, (char*)&arg);
-		insert_padding(buf, in, size * 1, 0);
+		pad_buffer(buf, in, size * 1, 0);
 		return ;
 	}
 	len = ft_strlen((char*)arg);
 	write_to_buffer(buf, APPEND, size * len, (char*)arg);
-	insert_padding(buf, in, size * len, 0);
+	pad_buffer(buf, in, size * len, 0);
 	return ;
 }

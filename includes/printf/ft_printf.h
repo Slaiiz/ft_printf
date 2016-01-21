@@ -58,6 +58,7 @@ typedef struct	s_format
 
 int				ft_printf(const char *format, ...);
 void			write_to_buffer(t_buffer *in, int mode, int len, const char *s);
+void			pad_buffer(t_buffer *buf, t_format *in, size_t spa, size_t zpa);
 void			get_flags(t_format *out, const char **s);
 void			get_precision(t_format *out, const char **s);
 void			get_modifier(t_format *out, const char **s);
@@ -66,6 +67,6 @@ void			display_as_dec(t_buffer *buf, t_format *in, size_t arg);
 void			display_as_hex(t_buffer *buf, t_format *in, size_t arg);
 void			display_as_ptr(t_buffer *buf, t_format *in, size_t arg);
 void			display_as_str(t_buffer *buf, t_format *in, size_t arg);
-char			*get_output_color(const char **in);
+char			*parse_extras(const char **format);
 
 #endif

@@ -16,7 +16,7 @@ SRCS      =	ft_atoi.c			ft_bzero.c		ft_isalnum.c		ft_isalpha.c	ft_isascii.c\
 			ft_itoa_base.c		ft_isblank.c  	ft_chrrep.c			ft_strrev.c		ft_rot13.c\
 			ft_putnbr_base.c	ft_printmem.c	ft_nbrlen.c			ft_realloc.c	ft_arraydel.c\
 			ft_abs.c			ft_strndup.c  	ft_itoa_base64.c	ft_strlowcase.c	ft_strupcase.c\
-			ft_strcmpcase.c		ft_seekstr.c
+			ft_strcmpcase.c		ft_seekstr.c	ft_expect.c
 SRCSOBJ  := $(subst .c,.o,$(SRCS:	= ))
 PRINTF    =	main.c				extras.c		display.c			utilities.c
 PRINTFOBJ:= $(subst .c,.o,$(PRINTF:	= ))
@@ -49,6 +49,13 @@ clean:
 
 fclean: clean
 	rm -f $(NAME)
+
+renolibft:
+	cd objs;\
+	rm -f $(PRINTFOBJ) ft_printf.o;
+	make ft_printf.o;\
+	cd objs;\
+	ar -r ../$(NAME) ft_printf.o
 
 re: fclean all
 
