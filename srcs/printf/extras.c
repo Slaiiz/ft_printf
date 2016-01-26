@@ -52,26 +52,26 @@ static char	*get_font_modifier(const char **in)
 
 	if (output != NULL)
 		free(output);
-	if ((output = malloc(sizeof(char) * 15)) == NULL)
+	if ((output = ft_memalloc(sizeof(char) * 15)) == NULL)
 		return ("");
-	ft_strncat(output, "\033[", 2);
+	ft_strcat(output, "\033[");
 	if (!ft_isalpha(**in))
-		return (ft_strncat(output, "21;23;24;25m", 12));
+		return (ft_strcat(output, "21;23;24;25m"));
 	while (1)
 	{
 		if (ft_seekstr(in, "b"))
-			ft_strncat(output, "1", 1);
+			ft_strcat(output, "1");
 		else if (ft_seekstr(in, "i"))
-			ft_strncat(output, "3", 1);
+			ft_strcat(output, "3");
 		else if (ft_seekstr(in, "u"))
-			ft_strncat(output, "4", 1);
+			ft_strcat(output, "4");
 		else if (ft_seekstr(in, "x"))
-			ft_strncat(output, "5", 1);
-		if (!ft_isalpha(*(++*in)))
+			ft_strcat(output, "5");
+		if (!ft_isalpha(**in))
 			break ;
-		ft_strncat(output, ";", 1);
+		ft_strcat(output, ";");
 	}
-	return (ft_strncat(output, "m", 1));
+	return (ft_strcat(output, "m"));
 }
 
 char		*parse_extras(const char **format)

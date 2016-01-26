@@ -12,9 +12,9 @@
 
 #include "ft_printf.h"
 
-static size_t	flush_to_stdout(t_buffer *in)
+static int	flush_to_stdout(t_buffer *in)
 {
-	size_t		len;
+	int		len;
 
 	len = in->len;
 	if (len < 1 || in->data == NULL)
@@ -92,8 +92,11 @@ int				ft_printf(const char *format, ...)
 		if (*format == '{' && ++format)
 		{
 			output = parse_extras(&format);
+//			write(1, "->", 2);
+//			write(1, output, ft_strlen(output));
 			if (*format == '}' && ++format)
 				write_to_buffer(&buffer, APPEND, ft_strlen(output), output);
+			write(1, output, ft_strlen(output));
 		}
 		else if (*format == '%' && ++format)
 		{
@@ -101,7 +104,9 @@ int				ft_printf(const char *format, ...)
 			format_argument(&buffer, &format, va_arg(argp, size_t));
 		}
 		else
+		{
 			write_to_buffer(&buffer, APPEND, 1, format++);
+		}
 	}
 	written += flush_to_stdout(&buffer);
 	return (written);

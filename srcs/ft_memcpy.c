@@ -17,11 +17,6 @@ void	*ft_memcpy(void *dst, const void *src, size_t n)
 	void *tmp;
 
 	tmp = dst;
-	while (n > 3)
-	{
-		*((unsigned int*)tmp++) = *((unsigned int*)src++);
-		n -= 4;
-	}
 	while (n--)
 		*((unsigned char*)tmp++) = *((unsigned char*)src++);
 	return (dst);
