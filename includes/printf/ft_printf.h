@@ -54,6 +54,7 @@ typedef struct	s_format
 	size_t		modifier;
 	short		conversion;
 	char		flags;
+	intmax_t	fd;
 }				t_format;
 
 int				ft_printf(const char *format, ...);

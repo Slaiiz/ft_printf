@@ -34,42 +34,44 @@ static char	*get_output_color(const char **in)
 		colors[7] = "white";
 		colors[8] = "pouet";
 		colors[9] = "eoc";
-		output = ft_strdup("\033[3*m");
+ 		output = ft_strdup("\033[3*m");
 	}
 	index = -1;
-	while (++index < 8)
+	while (++index < 10)
 		if (ft_seekstr(in, colors[index]))
 			break ;
-	output[3] = 9;
+	output[3] = 9 + '0';
 	if (index < 8)
-		output[3] = index;
+		output[3] = index + '0';
 	return (output);
 }
 
 static char	*get_font_modifier(const char **in)
 {
 	static char	*output;
-	int			flags;
 
 	if (output != NULL)
 		free(output);
-	output = ft_memalloc(sizeof(char) * 10);
+	if ((output = malloc(sizeof(char) * 15)) == NULL)
+		return ("");
 	ft_strncat(output, "\033[", 2);
-	flags = 0x00000000;
-	while (ft_isalpha(**in))
+	if (!ft_isalpha(**in))
+		return (ft_strncat(output, "21;23;24;25m", 12));
+	while (1)
 	{
-		if (ft_seekstr(in, "b") && !(flags & 0x1) && (flags |= 0x1))
-			ft_strncat(output, "1;", 2);
-		if (ft_seekstr(in, "i") && !(flags & 0x2) && (flags |= 0x2))
-			ft_strncat(output, "3;", 2);
-		if (ft_seekstr(in, "u") && !(flags & 0x4) && (flags |= 0x4))
-			ft_strncat(output, "4;", 2);
-		else
-			(*in)++;
+		if (ft_seekstr(in, "b"))
+			ft_strncat(output, "1", 1);
+		else if (ft_seekstr(in, "i"))
+			ft_strncat(output, "3", 1);
+		else if (ft_seekstr(in, "u"))
+			ft_strncat(output, "4", 1);
+		else if (ft_seekstr(in, "x"))
+			ft_strncat(output, "5", 1);
+		if (!ft_isalpha(*(++*in)))
+			break ;
+		ft_strncat(output, ";", 1);
 	}
-	if (flags)
-		ft_strncat(output, "m\0", 2);
-	return (output);
+	return (ft_strncat(output, "m", 1));
 }
 
 char		*parse_extras(const char **format)
@@ -80,13 +82,12 @@ char		*parse_extras(const char **format)
 	if (output != NULL)
 		free(output);
 	output = get_output_color(format);
-	if (**format != ';')
+	if (ft_seekstr(format, ";"))
 	{
-		tmp = output;
-		output = NULL;
-		return (tmp);
+		output = ft_strjoin(output, get_font_modifier(format));
+		return (output);
 	}
-	(*format)++;
-	output = ft_strjoin(output, get_font_modifier(format));
-	return (output);
+	tmp = output;
+	output = NULL;
+	return (tmp);
 }

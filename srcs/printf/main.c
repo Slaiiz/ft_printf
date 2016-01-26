@@ -53,28 +53,28 @@ void			write_to_buffer(t_buffer *in, int mode, int len, const char *s)
 {
 	char	*new;
 
-	if (in->len == in->size)
+	while (len-- && *s)
 	{
-		if ((new = malloc(sizeof(char) * (in->size + 32))) == NULL)
-			return ;
-		if (in->data != NULL)
+		if (in->len == in->size)
 		{
-			ft_memcpy(new, in->data, in->size);
-			free(in->data);
+			if ((new = malloc(sizeof(char) * (in->size + 32))) == NULL)
+				return ;
+			if (in->data != NULL)
+			{
+				ft_memcpy(new, in->data, in->len);
+				free(in->data);
+			}
+			in->data = new;
+			in->size += 32;
 		}
-		in->data = new;
-		in->size += 32;
+		if (mode & PREPEND)
+		{
+			ft_memmove(in->data + 1, in->data, in->len++);
+			*(in->data + 0) = *s++;
+		}
+		else if (mode & APPEND)
+			*(in->data + in->len++) = *s++;
 	}
-	if (mode & PREPEND)
-	{
-		ft_memmove(in->data + 1, in->data, in->len);
-		*(in->data + 0) = *s;
-	}
-	else if (mode & APPEND)
-		*(in->data + in->len) = *s;
-	in->len++;
-	if (--len && *s)
-		write_to_buffer(in, mode, len, ++s);
 	return ;
 }
 
