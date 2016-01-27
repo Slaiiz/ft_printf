@@ -24,20 +24,20 @@ static int	flush_to_stdout(t_buffer *in)
 	return (len);
 }
 
-static void		format_argument(t_buffer *in, const char **s, size_t arg)
+static void	format_argument(t_buffer *in, const char **s, size_t arg)
 {
 	t_format	format;
 
+	if (**s == '%')
+	{
+		write_to_buffer(in, APPEND, 1, *s++);
+		return (pad_buffer(in, &format, 1, 1));
+	}
 	ft_bzero(&format, sizeof(t_format));
 	get_flags(&format, s);
 	get_precision(&format, s);
 	get_modifier(&format, s);
 	get_conversion(&format, s);
-	if (**s == '%')
-	{
-		write_to_buffer(in, APPEND, 1, *s++);
-		return pad_buffer(in, &format, 1, 1);
-	}
 	if (format.conversion & (CONV_CHAR | CONV_WCHAR | CONV_STR | CONV_WSTR))
 		display_as_str(in, &format, arg);
 	else if (format.conversion & (CONV_OCT | CONV_INT | CONV_UINT))
@@ -49,7 +49,7 @@ static void		format_argument(t_buffer *in, const char **s, size_t arg)
 	return ;
 }
 
-void			write_to_buffer(t_buffer *in, int mode, int len, const char *s)
+void		write_to_buffer(t_buffer *in, int mode, int len, const char *s)
 {
 	char	*new;
 
@@ -78,7 +78,7 @@ void			write_to_buffer(t_buffer *in, int mode, int len, const char *s)
 	return ;
 }
 
-int				ft_printf(const char *format, ...)
+int			ft_printf(const char *format, ...)
 {
 	int				written;
 	char			*output;
@@ -101,9 +101,7 @@ int				ft_printf(const char *format, ...)
 			format_argument(&buffer, &format, va_arg(argp, size_t));
 		}
 		else
-		{
 			write_to_buffer(&buffer, APPEND, 1, format++);
-		}
 	}
 	written += flush_to_stdout(&buffer);
 	return (written);

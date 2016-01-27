@@ -34,13 +34,12 @@ static char	*get_output_color(const char **in)
 		colors[7] = "white";
 		colors[8] = "pouet";
 		colors[9] = "eoc";
- 		output = ft_strdup("\033[3*m");
+		output = ft_strdup("\033[3*m");
 	}
 	index = -1;
 	while (++index < 10)
 		if (ft_seekstr(in, colors[index]))
 			break ;
-	output[3] = 9 + '0';
 	if (index < 8)
 		output[3] = index + '0';
 	return (output);

@@ -105,11 +105,11 @@ void		display_as_str(t_buffer *buf, t_format *in, size_t arg)
 	if (in->conversion & (CONV_CHAR | CONV_WCHAR))
 	{
 		write_to_buffer(buf, APPEND, size * 1, (char*)&arg);
-		pad_buffer(buf, in, size * 1, 0);
+		pad_buffer(buf, in, size * 1, 1);
 		return ;
 	}
 	len = ft_strlen((char*)arg);
 	write_to_buffer(buf, APPEND, size * len, (char*)arg);
-	pad_buffer(buf, in, size * len, 0);
+	pad_buffer(buf, in, size * len, len);
 	return ;
 }
