@@ -56,7 +56,7 @@ static char	*get_font_modifier(const char **in)
 		return ("");
 	ft_strcat(output, "\033[");
 	if (!ft_isalpha(**in))
-		return (ft_strcat(output, "21;23;24;25m"));
+		return (ft_strcat(output, "0m"));
 	while (1)
 	{
 		if (ft_seekstr(in, "b"))

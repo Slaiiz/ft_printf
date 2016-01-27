@@ -92,11 +92,8 @@ int				ft_printf(const char *format, ...)
 		if (*format == '{' && ++format)
 		{
 			output = parse_extras(&format);
-//			write(1, "->", 2);
-//			write(1, output, ft_strlen(output));
 			if (*format == '}' && ++format)
 				write_to_buffer(&buffer, APPEND, ft_strlen(output), output);
-			write(1, output, ft_strlen(output));
 		}
 		else if (*format == '%' && ++format)
 		{
