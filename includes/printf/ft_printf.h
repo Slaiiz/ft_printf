@@ -23,16 +23,16 @@
 # define FLAG_SIGN	0x08
 # define FLAG_NEGF	0x10
 
-# define CONV_INT	0x0001
-# define CONV_STR	0x0002
-# define CONV_WSTR	0x0004
-# define CONV_PTR	0x0008
-# define CONV_OCT	0x0010
-# define CONV_UINT	0x0020
-# define CONV_HEXL	0x0040
-# define CONV_HEXU	0x0080
-# define CONV_CHAR	0x0100
-# define CONV_WCHAR	0x0200
+# define CONV_INT	0x001
+# define CONV_STR	0x002
+# define CONV_WSTR	0x004
+# define CONV_PTR	0x008
+# define CONV_OCT	0x010
+# define CONV_UINT	0x020
+# define CONV_HEXL	0x040
+# define CONV_HEXU	0x080
+# define CONV_CHAR	0x100
+# define CONV_WCHAR	0x200
 
 # define APPEND		1
 # define PREPEND	2

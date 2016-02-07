@@ -28,11 +28,6 @@ static void	format_argument(t_buffer *in, const char **s, size_t arg)
 {
 	t_format	format;
 
-	if (**s == '%')
-	{
-		write_to_buffer(in, APPEND, 1, *s++);
-		return (pad_buffer(in, &format, 1, 1));
-	}
 	ft_bzero(&format, sizeof(t_format));
 	get_flags(&format, s);
 	get_precision(&format, s);
@@ -46,6 +41,11 @@ static void	format_argument(t_buffer *in, const char **s, size_t arg)
 		display_as_hex(in, &format, arg);
 	else if (format.conversion & CONV_PTR)
 		display_as_ptr(in, &format, arg);
+	if (**s == '%')
+	{
+		write_to_buffer(in, APPEND, 1, *s++);
+		return (pad_buffer(in, &format, 1, 1));
+	}
 	return ;
 }
 

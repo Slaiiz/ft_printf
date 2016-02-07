@@ -6,7 +6,7 @@
 /*   By: vchesnea <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/11/24 10:00:20 by vchesnea          #+#    #+#             */
-/*   Updated: 2015/12/09 11:17:41 by vchesnea         ###   ########.fr       */
+/*   Updated: 2016/02/07 17:19:31 by vchesnea         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,6 +84,7 @@ int					ft_expect(const char **s, const char *format, ...);
 size_t				ft_strlen(const char *s);
 size_t				ft_strlcat(char *dst, const char *src, size_t n);
 size_t				ft_nbrlen(int n, int base);
+size_t				ft_wstrlen(const wchar_t *s);
 char				*ft_strdup(const char *s1);
 char				*ft_strndup(const char *s1, size_t n);
 char				*ft_strcpy(char *dst, const char *src);
@@ -101,8 +102,12 @@ char				*ft_strsub(char const *s, unsigned int start, size_t len);
 char				*ft_strjoin(char const *s1, char const *s2);
 char				*ft_strtrim(char const *s);
 char				*ft_itoa(int n);
+char				*ft_uitoa(unsigned int n);
+char				*ft_uitoa64(unsigned long n);
 char				*ft_itoa_base(int n, int base);
-char				*ft_itoa_base64(size_t n, int base);
+char				*ft_uitoa_base(unsigned int n, int base);
+char				*ft_itoa_base64(long n, int base);
+char				*ft_uitoa_base64(unsigned long n, int base);
 char				*ft_chrrep(char *str, char c, char **rep);
 char				*ft_rot13(char *s);
 char				*ft_strrev(char *str);

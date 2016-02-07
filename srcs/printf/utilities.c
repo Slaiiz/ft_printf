@@ -57,22 +57,28 @@ void		get_precision(t_format *out, const char **s)
 	return ;
 }
 
+/*
+** HACK:
+** Bit shift operations would overflow. Though that was the whole point of the
+** trick it makes the compiler spit out errors.
+*/
+
 void		get_modifier(t_format *out, const char **s)
 {
 	if (ft_seekstr(s, "hh"))
-		out->modifier = 0x00000000000000FF;
+		out->modifier = 0x00000000000000ff;
 	else if (ft_seekstr(s, "h"))
-		out->modifier = 0x000000000000FFFF;
+		out->modifier = 0x000000000000ffff;
 	else if (ft_seekstr(s, "ll"))
-		out->modifier = 0xFFFFFFFFFFFFFFFF;
+		out->modifier = 0xffffffffffffffff;
 	else if (ft_seekstr(s, "l"))
-		out->modifier = 0xFFFFFFFFFFFFFFFF;
+		out->modifier = 0xffffffffffffffff;
 	else if (ft_seekstr(s, "j"))
-		out->modifier = 0xFFFFFFFFFFFFFFFF;
+		out->modifier = 0xffffffffffffffff;
 	else if (ft_seekstr(s, "z"))
-		out->modifier = 0xFFFFFFFFFFFFFFFF;
+		out->modifier = 0xffffffffffffffff;
 	else
-		out->modifier = 0x00000000FFFFFFFF;
+		out->modifier = 0x00000000ffffffff;
 	return ;
 }
 

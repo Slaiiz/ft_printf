@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_itoa_base.c                                     :+:      :+:    :+:   */
+/*   ft_uitoa_base64.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: vchesnea <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -12,18 +12,14 @@
 
 #include "libft.h"
 
-char	*ft_itoa_base(int n, int base)
+char	*ft_uitoa_base64(unsigned long n, int base)
 {
-	char			digits[32];
-	unsigned int	negative;
+	char			digits[64];
 	unsigned int	index;
 	unsigned int	count;
 	char			*out;
 
 	base = ft_min(ft_max(base, 2), 16);
-	negative = n & SIGN_BIT_INT;
-	if (negative)
-		n = -n;
 	count = 0;
 	while (1)
 	{
@@ -31,11 +27,9 @@ char	*ft_itoa_base(int n, int base)
 		if ((n = n / base) == 0)
 			break ;
 	}
-	if ((out = ft_memalloc(count + 2)) == NULL)
+	if ((out = ft_memalloc(count + 1)) == NULL)
 		return (NULL);
-	if (negative)
-		*out = '-';
-	index = negative && 1;
+	index = 0;
 	while (count--)
 		*(out + index++) = digits[count];
 	return (out);
