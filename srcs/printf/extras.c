@@ -40,7 +40,7 @@ static char	*get_output_color(const char **in)
 	while (++index < 10)
 		if (ft_seekstr(in, colors[index]))
 			break ;
-	if (index < 8)
+	if (index < 10)
 		output[3] = index + '0';
 	return (output);
 }
@@ -51,11 +51,12 @@ static char	*get_font_modifier(const char **in)
 
 	if (output != NULL)
 		free(output);
-	if ((output = ft_memalloc(sizeof(char) * 15)) == NULL)
+	if ((output = ft_memalloc(sizeof(char) * 25)) == NULL)
 		return ("");
-	ft_strcat(output, "\033[");
+	ft_strcat(output, "\033[22;23;24;25m");
 	if (!ft_isalpha(**in))
-		return (ft_strcat(output, "0m"));
+		return (output);
+	ft_strcat(output, "\033[");
 	while (1)
 	{
 		if (ft_seekstr(in, "b"))

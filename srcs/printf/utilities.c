@@ -51,8 +51,13 @@ void		get_precision(t_format *out, const char **s)
 		*s = ++data;
 		while (ft_isdigit(*data))
 			data++;
-		out->precision = ft_atoi(*s);
+		if (data != *s)
+			out->precision = ft_atoi(*s);
+		else
+			out->precision = INVALID;
 	}
+	else
+		out->precision = MISSING;
 	*s = data;
 	return ;
 }

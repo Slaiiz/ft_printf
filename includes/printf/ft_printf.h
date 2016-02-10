@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_printf.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: vchesnea <marvin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2016/00/02 13:37:38 by marvin            #+#    #+#             */
-/*   Updated: 2016/00/02 13:37:38 by marvin           ###   ########.fr       */
+/*   Created: 2016/00/02 13:37:38 by vchesnea          #+#    #+#             */
+/*   Updated: 2016/00/02 13:37:38 by vchesnea         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,30 +40,33 @@
 # define PRECISION	1
 # define FIELDWIDTH	2
 
+# define MISSING	-1
+# define INVALID	-2
+
 typedef struct	s_buffer
 {
-	char		*data;
-	size_t		size;
 	size_t		len;
+	size_t		size;
+	char		*data;
 }				t_buffer;
 
 typedef struct	s_format
 {
-	size_t		fieldwidth;
-	size_t		precision;
-	size_t		modifier;
-	short		conversion;
-	char		flags;
 	intmax_t	fd;
+	char		flags;
+	size_t		modifier;
+	int			precision;
+	int			fieldwidth;
+	short		conversion;
 }				t_format;
 
 int				ft_printf(const char *format, ...);
 void			write_to_buffer(t_buffer *in, int mode, int len, const char *s);
-void			pad_buffer(t_buffer *buf, t_format *in, size_t spa, size_t zpa);
 void			get_flags(t_format *out, const char **s);
 void			get_precision(t_format *out, const char **s);
 void			get_modifier(t_format *out, const char **s);
 void			get_conversion(t_format *out, const char **s);
+void			pad_buffer(t_buffer *buf, t_format *in, int fpad, int ppad);
 void			display_as_dec(t_buffer *buf, t_format *in, size_t arg);
 void			display_as_hex(t_buffer *buf, t_format *in, size_t arg);
 void			display_as_ptr(t_buffer *buf, t_format *in, size_t arg);
