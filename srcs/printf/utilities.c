@@ -54,7 +54,7 @@ void		get_precision(t_format *out, const char **s)
 		if (data != *s)
 			out->precision = ft_atoi(*s);
 		else
-			out->precision = INVALID;
+			out->precision = 0;
 	}
 	else
 		out->precision = MISSING;
@@ -115,3 +115,10 @@ void		get_conversion(t_format *out, const char **s)
 		out->conversion = CONV_WCHAR;
 	return ;
 }
+
+// void		sign_extend(t_format *in, size_t *arg)
+// {
+// 	*in = *in;
+// 	*arg = *arg;
+// 	return ;
+// }

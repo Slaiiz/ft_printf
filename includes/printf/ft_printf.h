@@ -34,6 +34,13 @@
 # define CONV_CHAR	0x100
 # define CONV_WCHAR	0x200
 
+# define MODF_CHAR	0x01
+# define MODF_SHORT	0x02
+# define MODF_INT	0x04
+# define MODF_LONG	0x08
+# define MODF_LLONG	0x0C
+# define MODF_IMAX	0x10
+
 # define APPEND		1
 # define PREPEND	2
 
@@ -41,13 +48,13 @@
 # define FIELDWIDTH	2
 
 # define MISSING	-1
-# define INVALID	-2
 
 typedef struct	s_buffer
 {
 	size_t		len;
 	size_t		size;
 	char		*data;
+	size_t		written;
 }				t_buffer;
 
 typedef struct	s_format

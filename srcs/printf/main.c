@@ -20,6 +20,7 @@ static int	flush_to_stdout(t_buffer *in)
 	if (len < 1 || in->data == NULL)
 		return (0);
 	write(1, in->data, len);
+	in->written += len;
 	in->len = 0;
 	return (len);
 }
@@ -33,6 +34,7 @@ static void	format_argument(t_buffer *in, const char **s, size_t arg)
 	get_precision(&format, s);
 	get_modifier(&format, s);
 	get_conversion(&format, s);
+//	sign_extend(&format, &arg);
 	if (format.conversion & (CONV_CHAR | CONV_WCHAR | CONV_STR | CONV_WSTR))
 		display_as_str(in, &format, arg);
 	else if (format.conversion & (CONV_OCT | CONV_INT | CONV_UINT))
@@ -80,12 +82,10 @@ void		write_to_buffer(t_buffer *in, int mode, int len, const char *s)
 
 int			ft_printf(const char *format, ...)
 {
-	int				written;
 	char			*output;
 	static t_buffer	buffer;
 	va_list			argp;
 
-	written = 0;
 	va_start(argp, format);
 	while (*format != '\0')
 	{
@@ -97,12 +97,12 @@ int			ft_printf(const char *format, ...)
 		}
 		else if (*format == '%' && ++format)
 		{
-			written += flush_to_stdout(&buffer);
-			format_argument(&buffer, &format, va_arg(argp, size_t));
+			flush_to_stdout(&buffer);
+			format_argument(&buffer, &format, va_arg(argp, intmax_t));
 		}
 		else
 			write_to_buffer(&buffer, APPEND, 1, format++);
 	}
-	written += flush_to_stdout(&buffer);
-	return (written);
+	flush_to_stdout(&buffer);
+	return (buffer.written);
 }
