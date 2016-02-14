@@ -34,12 +34,9 @@
 # define CONV_CHAR	0x100
 # define CONV_WCHAR	0x200
 
-# define MODF_CHAR	0x01
-# define MODF_SHORT	0x02
-# define MODF_INT	0x04
-# define MODF_LONG	0x08
-# define MODF_LLONG	0x0C
-# define MODF_IMAX	0x10
+# define NUMERIC	0x1000
+# define STRING		0x2000
+# define POINTER	0x4000
 
 # define APPEND		1
 # define PREPEND	2
@@ -73,6 +70,7 @@ void			get_flags(t_format *out, const char **s);
 void			get_precision(t_format *out, const char **s);
 void			get_modifier(t_format *out, const char **s);
 void			get_conversion(t_format *out, const char **s);
+size_t			sign_extend(t_format *format, size_t arg);
 void			pad_buffer(t_buffer *buf, t_format *in, int fpad, int ppad);
 void			display_as_dec(t_buffer *buf, t_format *in, size_t arg);
 void			display_as_hex(t_buffer *buf, t_format *in, size_t arg);

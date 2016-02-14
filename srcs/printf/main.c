@@ -34,21 +34,19 @@ static void	format_argument(t_buffer *in, const char **s, size_t arg)
 	get_precision(&format, s);
 	get_modifier(&format, s);
 	get_conversion(&format, s);
-//	sign_extend(&format, &arg);
-	if (format.conversion & (CONV_CHAR | CONV_WCHAR | CONV_STR | CONV_WSTR))
+	if (format.conversion & STRING)
 		display_as_str(in, &format, arg);
-	else if (format.conversion & (CONV_OCT | CONV_INT | CONV_UINT))
-		display_as_dec(in, &format, arg);
 	else if (format.conversion & (CONV_HEXL | CONV_HEXU))
-		display_as_hex(in, &format, arg);
-	else if (format.conversion & CONV_PTR)
+		display_as_hex(in, &format, sign_extend(&format, arg));
+	else if (format.conversion & NUMERIC)
+		display_as_dec(in, &format, sign_extend(&format, arg));
+	else if (format.conversion & POINTER)
 		display_as_ptr(in, &format, arg);
 	if (**s == '%')
 	{
 		write_to_buffer(in, APPEND, 1, *s++);
 		return (pad_buffer(in, &format, 1, 1));
 	}
-	return ;
 }
 
 void		write_to_buffer(t_buffer *in, int mode, int len, const char *s)
@@ -77,7 +75,6 @@ void		write_to_buffer(t_buffer *in, int mode, int len, const char *s)
 		else if (mode & APPEND)
 			*(in->data + in->len++) = *s++;
 	}
-	return ;
 }
 
 int			ft_printf(const char *format, ...)

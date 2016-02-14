@@ -35,7 +35,6 @@ void		get_flags(t_format *out, const char **s)
 		(*s)++;
 	}
 	out->flags = flags;
-	return ;
 }
 
 void		get_precision(t_format *out, const char **s)
@@ -59,13 +58,12 @@ void		get_precision(t_format *out, const char **s)
 	else
 		out->precision = MISSING;
 	*s = data;
-	return ;
 }
 
 /*
 ** HACK:
 ** Bit shift operations would overflow. Though that was the whole point of the
-** trick it makes the compiler spit out errors.
+** trick it makes the compiler spit out errors. This is not a portable solution.
 */
 
 void		get_modifier(t_format *out, const char **s)
@@ -84,41 +82,40 @@ void		get_modifier(t_format *out, const char **s)
 		out->modifier = 0xffffffffffffffff;
 	else
 		out->modifier = 0x00000000ffffffff;
-	return ;
 }
 
 void		get_conversion(t_format *out, const char **s)
 {
 	if (ft_seekstr(s, "s"))
-		out->conversion = CONV_STR;
+		out->conversion = CONV_STR | STRING;
 	else if (ft_seekstr(s, "S"))
-		out->conversion = CONV_WSTR;
+		out->conversion = CONV_WSTR | STRING;
 	else if (ft_seekstr(s, "p"))
-		out->conversion = CONV_PTR;
+		out->conversion = CONV_PTR | POINTER;
 	else if (ft_seekstr(s, "d")
 		|| ft_seekstr(s, "D")
 		|| ft_seekstr(s, "i"))
-		out->conversion = CONV_INT;
+		out->conversion = CONV_INT | NUMERIC;
 	else if (ft_seekstr(s, "o")
 		|| ft_seekstr(s, "O"))
-		out->conversion = CONV_OCT;
+		out->conversion = CONV_OCT | NUMERIC;
 	else if (ft_seekstr(s, "u")
 		|| ft_seekstr(s, "U"))
-		out->conversion = CONV_UINT;
+		out->conversion = CONV_UINT | NUMERIC;
 	else if (ft_seekstr(s, "x"))
-		out->conversion = CONV_HEXL;
+		out->conversion = CONV_HEXL | NUMERIC;
 	else if (ft_seekstr(s, "X"))
-		out->conversion = CONV_HEXU;
+		out->conversion = CONV_HEXU | NUMERIC;
 	else if (ft_seekstr(s, "c"))
-		out->conversion = CONV_CHAR;
+		out->conversion = CONV_CHAR | STRING;
 	else if (ft_seekstr(s, "C"))
-		out->conversion = CONV_WCHAR;
-	return ;
+		out->conversion = CONV_WCHAR | STRING;
 }
 
-// void		sign_extend(t_format *in, size_t *arg)
-// {
-// 	*in = *in;
-// 	*arg = *arg;
-// 	return ;
-// }
+size_t		sign_extend(t_format *in, size_t arg)
+{
+	size_t	mask;
+
+	mask = (in->modifier + 1) >> 1;
+	return (((arg & in->modifier) ^ mask) - mask);
+}

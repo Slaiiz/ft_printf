@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_itoa64.c                                        :+:      :+:    :+:   */
+/*   ft_itoa.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: vchesnea <vchesnea@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -12,7 +12,7 @@
 
 #include "libft.h"
 
-char	*ft_itoa64(long n)
+char	*ft_itoa(int n)
 {
 	char			digits[32];
 	unsigned int	negative;
@@ -20,9 +20,8 @@ char	*ft_itoa64(long n)
 	unsigned int	count;
 	char			*out;
 
-	if (n == SIGN_BIT_INT)
-		return (ft_strdup("-2147483648"));
-	if ((negative = n & SIGN_BIT_INT))
+	negative = n < 0;
+	if (negative)
 		n = -n;
 	count = 0;
 	while (1)

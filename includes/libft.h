@@ -19,11 +19,11 @@
 # include <stddef.h>
 # include "printf/ft_printf.h"
 
+# define BSIZE_INT			(8 * sizeof(int))
 # define BSIZE_SIZE_T		(8 * sizeof(size_t))
-# define SIGN_BIT_SIZE_T	(1 << (BSIZE_SIZE_T - 1))
 
-# define BSIZE_INT		(8 * sizeof(int))
 # define SIGN_BIT_INT		(1 << (BSIZE_INT - 1))
+# define SIGN_BIT_SIZE_T	(1 << (BSIZE_SIZE_T - 1))
 
 typedef struct		s_list
 {
@@ -102,11 +102,12 @@ char				*ft_strsub(char const *s, unsigned int start, size_t len);
 char				*ft_strjoin(char const *s1, char const *s2);
 char				*ft_strtrim(char const *s);
 char				*ft_itoa(int n);
+char				*ft_itoa64(long n);
 char				*ft_uitoa(unsigned int n);
 char				*ft_uitoa64(unsigned long n);
 char				*ft_itoa_base(int n, int base);
-char				*ft_uitoa_base(unsigned int n, int base);
 char				*ft_itoa_base64(long n, int base);
+char				*ft_uitoa_base(unsigned int n, int base);
 char				*ft_uitoa_base64(unsigned long n, int base);
 char				*ft_chrrep(char *str, char c, char **rep);
 char				*ft_rot13(char *s);
