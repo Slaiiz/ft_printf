@@ -16,28 +16,21 @@
 ** TODO: Properly prefix decimal numbers
 */
 
-static void	include_prefix(t_buffer *buf, t_format *in)
+static void		include_prefix(t_buffer *buf, t_format *in, int skip, char *pre)
 {
-	if (in->conv & (CONV_HEXU | CONV_HEXL))
+	size_t	len;
+
+	len = ft_strlen(pre);
+	skip += len;
+	if (in->prec == MISSING && (in->flags & ZPAD) && !(in->flags & NEGF))
 	{
-		write_to_buffer(buf, PREPEND, 2, (in->conv & CONV_HEXU) ?"X0" :"x0");
-		return ;
+		pad_buffer(buf, in, skip, MISSING);
+		write_to_buffer(buf, PREPEND, len, pre);
 	}
-	else if (in->conv & CONV_INT && buf->data[buf->len - 1] != '-')
+	else
 	{
-		if (in->flags & FLAG_SIGN)
-			write_to_buffer(buf, PREPEND, 1, "+");
-		else if (in->flags & FLAG_BLANK)
-			write_to_buffer(buf, PREPEND, 1, " ");
-		else
-			return ;
-	}
-	else if (in->conv & CONV_OCT)
-	{
-		if ((in->flags & FLAG_ALT))
-			write_to_buffer(buf, PREPEND, 1, "0");
-		else
-			return ;
+		write_to_buffer(buf, PREPEND, len, pre);
+		pad_buffer(buf, in, skip, MISSING);
 	}
 }
 
@@ -55,21 +48,17 @@ void		display_as_dec(t_buffer *buf, t_format *in, size_t arg)
 	if (out == NULL)
 		return ;
 	len = ft_strlen(out);
-	write_to_buffer(buf, APPEND, len, out);
+	if (in->prec == MISSING || arg)
+		write_to_buffer(buf, APPEND, len, out);
 	pad_buffer(buf, in, MISSING, len);
-	if (!(in->flags & FLAG_ZPAD) || (in->flags & FLAG_NEGF)
-		|| (in->prec != MISSING))
-	{
-		include_prefix(buf, in);
-		in->field -= 1;
-		pad_buffer(buf, in, len, MISSING);
-	}
+	if ((in->flags & ALT) && (in->conv & CONV_OCT))
+		include_prefix(buf, in, len, "0");
+	else if ((in->flags & SIGN) && *out != '-')
+		include_prefix(buf, in, len, "+");
+	else if ((in->flags & BLANK) && *out != '-')
+		include_prefix(buf, in, len, " ");
 	else
-	{
-		in->field -= 1;
 		pad_buffer(buf, in, len, MISSING);
-		include_prefix(buf, in);
-	}
 	free(out);
 }
 
@@ -83,24 +72,18 @@ void		display_as_hex(t_buffer *buf, t_format *in, size_t arg)
 	len = ft_strlen(out);
 	if (in->conv & CONV_HEXU)
 		ft_strupcase(out);
-	write_to_buffer(buf, APPEND, len, out);
-	if ((in->flags & FLAG_ALT) && arg > 0)
+	if (in->prec == MISSING || arg)
+		write_to_buffer(buf, APPEND, len, out);
+	if ((in->flags & ALT) && arg)
 	{
 		pad_buffer(buf, in, MISSING, len);
-		if (!(in->flags & FLAG_ZPAD) || (in->flags & FLAG_NEGF)
-			|| (in->prec != MISSING))
-		{
-			include_prefix(buf, in);
-			in->field -= 2;
-			pad_buffer(buf, in, len, MISSING);
-			return ;
-		}
-		in->field -= 2;
-		pad_buffer(buf, in, len, MISSING);
-		include_prefix(buf, in);
-		return ;
+		if (in->conv & CONV_HEXU)
+			include_prefix(buf, in, len, "X0");
+		else
+			include_prefix(buf, in, len, "x0");
 	}
-	pad_buffer(buf, in, len, len);
+	else
+		pad_buffer(buf, in, len, len);
 }
 
 void		display_as_ptr(t_buffer *buf, t_format *in, size_t arg)
@@ -128,7 +111,7 @@ void		display_as_str(t_buffer *buf, t_format *in, size_t arg)
 		out = (char*)&arg;
 		if (in->conv & CONV_CHAR)
 			write_to_buffer(buf, APPEND, sizeof(char), out);
-		else
+		else if (in->conv & CONV_WCHAR)
 			write_to_buffer(buf, APPEND, sizeof(wchar_t), out);
 		pad_buffer(buf, in, 1, MISSING);
 		return ;
@@ -137,10 +120,10 @@ void		display_as_str(t_buffer *buf, t_format *in, size_t arg)
 	len = ft_strlen(out);
 	if (in->prec != MISSING)
 		len = ft_min(in->prec, len);
-	if (in->conv & CONV_WSTR)
-		write_to_buffer(buf, APPEND, sizeof(wchar_t) * len, out);
-	else if (in->conv & CONV_STR)
+	if (in->conv & CONV_STR)
 		write_to_buffer(buf, APPEND, sizeof(char) * len, out);
+	else if (in->conv & CONV_WSTR)
+		write_to_buffer(buf, APPEND, sizeof(wchar_t) * len, out);
 	if (arg == 0)
 		buf->written -= 2;
 	pad_buffer(buf, in, len, MISSING);

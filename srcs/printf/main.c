@@ -55,7 +55,7 @@ void		pad_buffer(t_buffer *buf, t_format *in, int fpad, int ppad)
 	int		mode;
 
 	mode = PREPEND;
-	if (in->flags & FLAG_NEGF)
+	if (in->flags & NEGF)
 		mode = APPEND;
 	style = in->conv & STRING ?" ": "0";
 	while (ppad >= 0 && in->prec > ppad)
@@ -65,7 +65,7 @@ void		pad_buffer(t_buffer *buf, t_format *in, int fpad, int ppad)
 			in->field--;
 		in->prec--;
 	}
-	style = !(in->flags & FLAG_ZPAD) || (in->flags & FLAG_NEGF)
+	style = !(in->flags & ZPAD) || (in->flags & NEGF)
 		|| (in->prec != MISSING && (in->conv & NUMERIC)) ?" " :"0";
 	while (fpad >= 0 && in->field > fpad)
 	{

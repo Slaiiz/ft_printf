@@ -17,11 +17,11 @@
 # include <unistd.h>
 # include "libft.h"
 
-# define FLAG_ALT	0x01
-# define FLAG_ZPAD	0x02
-# define FLAG_BLANK	0x04
-# define FLAG_SIGN	0x08
-# define FLAG_NEGF	0x10
+# define ALT	0x01
+# define ZPAD	0x02
+# define BLANK	0x04
+# define SIGN	0x08
+# define NEGF	0x10
 
 # define CONV_INT	0x001
 # define CONV_STR	0x002

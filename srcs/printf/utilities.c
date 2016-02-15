@@ -21,15 +21,15 @@ void		get_flags(t_format *out, const char **s)
 	while ((ch = **s) != '\0')
 	{
 		if (ch == '#')
-			flags |= FLAG_ALT;
+			flags |= ALT;
 		else if (ch == '0')
-			flags |= FLAG_ZPAD;
+			flags |= ZPAD;
 		else if (ch == '+')
-			flags |= FLAG_SIGN;
+			flags |= SIGN;
 		else if (ch == '-')
-			flags |= FLAG_NEGF;
+			flags |= NEGF;
 		else if (ch == ' ')
-			flags |= FLAG_BLANK;
+			flags |= BLANK;
 		else
 			break ;
 		(*s)++;
