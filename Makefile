@@ -39,6 +39,7 @@ $(NAME): $(SRCSOBJ)
 	ar -r ../$@ $(SRCSOBJ) ft_printf.o
 
 ft_printf.o:
+	mkdir -p objs;\
 	cd srcs/printf;\
 	$(CC) $(CFLAGS) -I ../../includes -I ../../includes/printf -c $(PRINTF);\
 	mv $(PRINTFOBJ) ../../objs;\
@@ -47,7 +48,8 @@ ft_printf.o:
 
 clean:
 	cd objs;\
-	rm -f $(SRCSOBJ) $(PRINTFOBJ) ft_printf.o;\
+	rm -f $(SRCSOBJ) $(PRINTFOBJ) ft_printf.o
+	rm -rf objs
 
 fclean: clean
 	rm -f $(NAME)

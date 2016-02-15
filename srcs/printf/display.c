@@ -37,10 +37,6 @@ void	pad_buffer(t_buffer *buf, t_format *in, int fpad, int ppad)
 	}
 }
 
-/*
-** TODO: Strip sign from output to allow padding.
-*/
-
 void	display_as_dec(t_buffer *buf, t_format *in, size_t arg)
 {
 	char	*out;
@@ -51,20 +47,22 @@ void	display_as_dec(t_buffer *buf, t_format *in, size_t arg)
 	else if (in->conversion & CONV_OCT)
 		out = ft_uitoa_base64(arg, 8);
 	else
+	{
 		out = ft_itoa64(arg);
+		if ((in->flags & FLAG_SIGN) && *out != '-')
+			write_to_buffer(buf, APPEND, 1, "+");
+		else if ((in->flags & FLAG_BLANK) && *out != '-')
+			write_to_buffer(buf, APPEND, 1, " ");
+	}
 	if (out == NULL)
 		return ;
 	len = ft_strlen(out);
 	write_to_buffer(buf, APPEND, len, out);
-	pad_buffer(buf, in, len, len);
-	if ((in->flags & FLAG_SIGN) && *out != '-')
-		write_to_buffer(buf, PREPEND, 1, "+");
-	else if ((in->flags & FLAG_BLANK) && *out != '-')
-		write_to_buffer(buf, PREPEND, 1, " ");
+	pad_buffer(buf, in, MISSING, len);
 	if ((in->flags & FLAG_ALT) && in->conversion & CONV_OCT && len++)
 		write_to_buffer(buf, PREPEND, 1, "0");
+	pad_buffer(buf, in, len, MISSING);
 	free(out);
-	return ;
 }
 
 void	display_as_hex(t_buffer *buf, t_format *in, size_t arg)
@@ -102,13 +100,14 @@ void	display_as_ptr(t_buffer *buf, t_format *in, size_t arg)
 	char	*out;
 	int		len;
 
-	if ((arg ) == 0)
+	if (arg == 0)
 		out = "(null)";
 	else if ((out = ft_uitoa_base64(arg & in->modifier, 16)) == NULL)
 		return ;
 	len = ft_strlen(out);
 	write_to_buffer(buf, APPEND, len, out);
 	pad_buffer(buf, in, len, len);
+	free(out);
 }
 
 void	display_as_str(t_buffer *buf, t_format *in, size_t arg)
@@ -119,25 +118,22 @@ void	display_as_str(t_buffer *buf, t_format *in, size_t arg)
 	if (in->conversion & (CONV_CHAR | CONV_WCHAR))
 	{
 		out = (char*)&arg;
-		len = 1;
 		if (in->conversion & CONV_CHAR)
 			write_to_buffer(buf, APPEND, sizeof(char), out);
 		else
 			write_to_buffer(buf, APPEND, sizeof(wchar_t), out);
+		pad_buffer(buf, in, 1, MISSING);
+		return ;
 	}
-	else
-	{
-		out = arg == 0 ?"(null)" : (char*)arg;
-		len = ft_strlen(out);
-		if (in->precision != MISSING)
-		{
-			in->precision = ft_min(in->precision, len);
-			len = in->precision;
-		}
-		if (in->conversion & CONV_WSTR)
-			write_to_buffer(buf, APPEND, sizeof(wchar_t) * len, out);
-		else if (in->conversion & CONV_STR)
-			write_to_buffer(buf, APPEND, sizeof(char) * len, out);
-	}
-	pad_buffer(buf, in, ft_strlen(out), len);
+	out = arg == 0 ?"(null)" : (char*)arg;
+	len = ft_strlen(out);
+	if (in->precision != MISSING)
+		len = ft_min(in->precision, len);
+	if (in->conversion & CONV_WSTR)
+		write_to_buffer(buf, APPEND, sizeof(wchar_t) * len, out);
+	else if (in->conversion & CONV_STR)
+		write_to_buffer(buf, APPEND, sizeof(char) * len, out);
+	if (arg == 0)
+		buf->written -= 2;
+	pad_buffer(buf, in, len, MISSING);
 }

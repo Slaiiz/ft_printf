@@ -112,10 +112,16 @@ void		get_conversion(t_format *out, const char **s)
 		out->conversion = CONV_WCHAR | STRING;
 }
 
+/*
+** Invert the sign of the number, taking advantage of two's complement
+** in the subtraction. The number regains its original sign with extra
+** bits at the end of the process.
+*/
+
 size_t		sign_extend(t_format *in, size_t arg)
 {
-	size_t	mask;
+	size_t	sign;
 
-	mask = (in->modifier + 1) >> 1;
-	return (((arg & in->modifier) ^ mask) - mask);
+	sign = (in->modifier + 1) >> 1;
+	return (((arg & in->modifier) ^ sign) - sign);
 }

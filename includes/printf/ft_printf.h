@@ -48,6 +48,7 @@
 
 typedef struct	s_buffer
 {
+	int			fd;
 	size_t		len;
 	size_t		size;
 	char		*data;
@@ -56,7 +57,6 @@ typedef struct	s_buffer
 
 typedef struct	s_format
 {
-	intmax_t	fd;
 	char		flags;
 	size_t		modifier;
 	int			precision;

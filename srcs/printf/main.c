@@ -19,7 +19,7 @@ static int	flush_to_stdout(t_buffer *in)
 	len = in->len;
 	if (len < 1 || in->data == NULL)
 		return (0);
-	write(1, in->data, len);
+	write(in->fd, in->data, len);
 	in->written += len;
 	in->len = 0;
 	return (len);
@@ -42,7 +42,7 @@ static void	format_argument(t_buffer *in, const char **s, size_t arg)
 		display_as_dec(in, &format, sign_extend(&format, arg));
 	else if (format.conversion & POINTER)
 		display_as_ptr(in, &format, arg);
-	if (**s == '%')
+	else if (**s == '%')
 	{
 		write_to_buffer(in, APPEND, 1, *s++);
 		return (pad_buffer(in, &format, 1, 1));
@@ -80,9 +80,10 @@ void		write_to_buffer(t_buffer *in, int mode, int len, const char *s)
 int			ft_printf(const char *format, ...)
 {
 	char			*output;
-	static t_buffer	buffer;
+	t_buffer		buffer;
 	va_list			argp;
 
+	ft_bzero(&buffer, sizeof(t_buffer));
 	va_start(argp, format);
 	while (*format != '\0')
 	{
@@ -95,7 +96,7 @@ int			ft_printf(const char *format, ...)
 		else if (*format == '%' && ++format)
 		{
 			flush_to_stdout(&buffer);
-			format_argument(&buffer, &format, va_arg(argp, intmax_t));
+			format_argument(&buffer, &format, va_arg(argp, size_t));
 		}
 		else
 			write_to_buffer(&buffer, APPEND, 1, format++);
