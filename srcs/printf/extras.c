@@ -74,20 +74,38 @@ static char	*get_font_modifier(const char **in)
 	return (ft_strcat(output, "m"));
 }
 
-char		*parse_extras(const char **format)
+static int	get_file_descriptor(const char **in)
 {
-	static char	*output;
-	char		*tmp;
+	const char	*tmp;
 
-	if (output != NULL)
-		free(output);
-	output = get_output_color(format);
-	if (ft_seekstr(format, ";"))
+	tmp = *in;
+	while (ft_isdigit(**in))
+		(*in)++;
+	return (ft_atoi(tmp));
+}
+
+void		parse_extras(t_buffer *in, const char **format)
+{
+	char	*out;
+
+	while (1)
 	{
-		output = ft_strjoin(output, get_font_modifier(format));
-		return (output);
+		if (ft_seekstr(format, "**fd:"))
+			in->fd = get_file_descriptor(format);
+		else if (ft_seekstr(format, "{"))
+		{
+			out = get_output_color(format);
+			if (ft_seekstr(format, ";"))
+			{
+				out = ft_strjoin(out, get_font_modifier(format));
+				if (ft_seekstr(format, "}"))
+					write_to_buffer(in, APPEND, ft_strlen(out), out);
+				free(out);
+			}
+			else if (ft_seekstr(format, "}"))
+		 		write_to_buffer(in, APPEND, ft_strlen(out), out);
+		}
+		else
+			break ;
 	}
-	tmp = output;
-	output = NULL;
-	return (tmp);
 }

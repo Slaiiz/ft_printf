@@ -34,13 +34,13 @@ static void	format_argument(t_buffer *in, const char **s, size_t arg)
 	get_precision(&format, s);
 	get_modifier(&format, s);
 	get_conversion(&format, s);
-	if (format.conversion & STRING)
+	if (format.conv & STRING)
 		display_as_str(in, &format, arg);
-	else if (format.conversion & (CONV_HEXL | CONV_HEXU))
+	else if (format.conv & (CONV_HEXL | CONV_HEXU))
 		display_as_hex(in, &format, sign_extend(&format, arg));
-	else if (format.conversion & NUMERIC)
+	else if (format.conv & NUMERIC)
 		display_as_dec(in, &format, sign_extend(&format, arg));
-	else if (format.conversion & POINTER)
+	else if (format.conv & POINTER)
 		display_as_ptr(in, &format, arg);
 	else if (**s == '%')
 	{
@@ -49,11 +49,36 @@ static void	format_argument(t_buffer *in, const char **s, size_t arg)
 	}
 }
 
+void		pad_buffer(t_buffer *buf, t_format *in, int fpad, int ppad)
+{
+	char	*style;
+	int		mode;
+
+	mode = PREPEND;
+	if (in->flags & FLAG_NEGF)
+		mode = APPEND;
+	style = in->conv & STRING ?" ": "0";
+	while (ppad >= 0 && in->prec > ppad)
+	{
+		write_to_buffer(buf, PREPEND, 1, style);
+		if (!(in->conv & STRING))
+			in->field--;
+		in->prec--;
+	}
+	style = !(in->flags & FLAG_ZPAD) || (in->flags & FLAG_NEGF)
+		|| (in->prec != MISSING && (in->conv & NUMERIC)) ?" " :"0";
+	while (fpad >= 0 && in->field > fpad)
+	{
+		write_to_buffer(buf, mode, 1, style);
+		in->field--;
+	}
+}
+
 void		write_to_buffer(t_buffer *in, int mode, int len, const char *s)
 {
 	char	*new;
 
-	while (len-- && *s)
+	while (len--)
 	{
 		if (in->len == in->size)
 		{
@@ -79,27 +104,22 @@ void		write_to_buffer(t_buffer *in, int mode, int len, const char *s)
 
 int			ft_printf(const char *format, ...)
 {
-	char			*output;
 	t_buffer		buffer;
 	va_list			argp;
 
 	ft_bzero(&buffer, sizeof(t_buffer));
 	va_start(argp, format);
+	buffer.fd = 1;
 	while (*format != '\0')
 	{
-		if (*format == '{' && ++format)
-		{
-			output = parse_extras(&format);
-			if (*format == '}' && ++format)
-				write_to_buffer(&buffer, APPEND, ft_strlen(output), output);
-		}
-		else if (*format == '%' && ++format)
+		parse_extras(&buffer, &format);
+		if (!ft_seekstr(&format, "%"))
+			write_to_buffer(&buffer, APPEND, 1, format++);
+		else
 		{
 			flush_to_stdout(&buffer);
 			format_argument(&buffer, &format, va_arg(argp, size_t));
 		}
-		else
-			write_to_buffer(&buffer, APPEND, 1, format++);
 	}
 	flush_to_stdout(&buffer);
 	return (buffer.written);

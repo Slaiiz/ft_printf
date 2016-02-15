@@ -58,10 +58,10 @@ typedef struct	s_buffer
 typedef struct	s_format
 {
 	char		flags;
-	size_t		modifier;
-	int			precision;
-	int			fieldwidth;
-	short		conversion;
+	size_t		modif;
+	int			prec;
+	int			field;
+	short		conv;
 }				t_format;
 
 int				ft_printf(const char *format, ...);
@@ -76,6 +76,6 @@ void			display_as_dec(t_buffer *buf, t_format *in, size_t arg);
 void			display_as_hex(t_buffer *buf, t_format *in, size_t arg);
 void			display_as_ptr(t_buffer *buf, t_format *in, size_t arg);
 void			display_as_str(t_buffer *buf, t_format *in, size_t arg);
-char			*parse_extras(const char **format);
+void			parse_extras(t_buffer *buf, const char **format);
 
 #endif

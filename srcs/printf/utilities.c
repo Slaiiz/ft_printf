@@ -44,19 +44,19 @@ void		get_precision(t_format *out, const char **s)
 	data = *s;
 	while (ft_isdigit(*data))
 		data++;
-	out->fieldwidth = ft_atoi(*s);
+	out->field = ft_atoi(*s);
 	if (*data == '.')
 	{
 		*s = ++data;
 		while (ft_isdigit(*data))
 			data++;
 		if (data != *s)
-			out->precision = ft_atoi(*s);
+			out->prec = ft_atoi(*s);
 		else
-			out->precision = 0;
+			out->prec = 0;
 	}
 	else
-		out->precision = MISSING;
+		out->prec = MISSING;
 	*s = data;
 }
 
@@ -69,59 +69,59 @@ void		get_precision(t_format *out, const char **s)
 void		get_modifier(t_format *out, const char **s)
 {
 	if (ft_seekstr(s, "hh"))
-		out->modifier = 0x00000000000000ff;
+		out->modif = 0x00000000000000ff;
 	else if (ft_seekstr(s, "h"))
-		out->modifier = 0x000000000000ffff;
+		out->modif = 0x000000000000ffff;
 	else if (ft_seekstr(s, "ll"))
-		out->modifier = 0xffffffffffffffff;
+		out->modif = 0xffffffffffffffff;
 	else if (ft_seekstr(s, "l"))
-		out->modifier = 0xffffffffffffffff;
+		out->modif = 0xffffffffffffffff;
 	else if (ft_seekstr(s, "j"))
-		out->modifier = 0xffffffffffffffff;
+		out->modif = 0xffffffffffffffff;
 	else if (ft_seekstr(s, "z"))
-		out->modifier = 0xffffffffffffffff;
+		out->modif = 0xffffffffffffffff;
 	else
-		out->modifier = 0x00000000ffffffff;
+		out->modif = 0x00000000ffffffff;
 }
 
 void		get_conversion(t_format *out, const char **s)
 {
 	if (ft_seekstr(s, "s"))
-		out->conversion = CONV_STR | STRING;
+		out->conv = CONV_STR | STRING;
 	else if (ft_seekstr(s, "S"))
-		out->conversion = CONV_WSTR | STRING;
+		out->conv = CONV_WSTR | STRING;
 	else if (ft_seekstr(s, "p"))
-		out->conversion = CONV_PTR | POINTER;
+		out->conv = CONV_PTR | POINTER;
 	else if (ft_seekstr(s, "d")
 		|| ft_seekstr(s, "D")
 		|| ft_seekstr(s, "i"))
-		out->conversion = CONV_INT | NUMERIC;
+		out->conv = CONV_INT | NUMERIC;
 	else if (ft_seekstr(s, "o")
 		|| ft_seekstr(s, "O"))
-		out->conversion = CONV_OCT | NUMERIC;
+		out->conv = CONV_OCT | NUMERIC;
 	else if (ft_seekstr(s, "u")
 		|| ft_seekstr(s, "U"))
-		out->conversion = CONV_UINT | NUMERIC;
+		out->conv = CONV_UINT | NUMERIC;
 	else if (ft_seekstr(s, "x"))
-		out->conversion = CONV_HEXL | NUMERIC;
+		out->conv = CONV_HEXL | NUMERIC;
 	else if (ft_seekstr(s, "X"))
-		out->conversion = CONV_HEXU | NUMERIC;
+		out->conv = CONV_HEXU | NUMERIC;
 	else if (ft_seekstr(s, "c"))
-		out->conversion = CONV_CHAR | STRING;
+		out->conv = CONV_CHAR | STRING;
 	else if (ft_seekstr(s, "C"))
-		out->conversion = CONV_WCHAR | STRING;
+		out->conv = CONV_WCHAR | STRING;
 }
 
 /*
 ** Invert the sign of the number, taking advantage of two's complement
-** in the subtraction. The number regains its original sign with extra
-** bits at the end of the process.
+** in the subsequent subtraction. The number regains its original sign
+** with extra bits at the end of the process.
 */
 
 size_t		sign_extend(t_format *in, size_t arg)
 {
 	size_t	sign;
 
-	sign = (in->modifier + 1) >> 1;
-	return (((arg & in->modifier) ^ sign) - sign);
+	sign = (in->modif + 1) >> 1;
+	return (((arg & in->modif) ^ sign) - sign);
 }
