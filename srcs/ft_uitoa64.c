@@ -14,7 +14,7 @@
 
 char	*ft_uitoa64(unsigned long n)
 {
-	char			digits[32];
+	char			digits[64];
 	unsigned int	index;
 	unsigned int	count;
 	char			*out;

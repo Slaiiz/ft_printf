@@ -87,29 +87,29 @@ void		get_modifier(t_format *out, const char **s)
 void		get_conversion(t_format *out, const char **s)
 {
 	if (ft_seekstr(s, "s"))
-		out->conv = CONV_STR | STRING;
+		out->conv = CSTR | STRING;
 	else if (ft_seekstr(s, "S"))
-		out->conv = CONV_WSTR | STRING;
+		out->conv = CWSTR | STRING;
 	else if (ft_seekstr(s, "p"))
-		out->conv = CONV_PTR | POINTER;
+		out->conv = CPTR | POINTER;
 	else if (ft_seekstr(s, "d")
 		|| ft_seekstr(s, "D")
 		|| ft_seekstr(s, "i"))
-		out->conv = CONV_INT | NUMERIC;
+		out->conv = CINT | NUMERIC;
 	else if (ft_seekstr(s, "o")
 		|| ft_seekstr(s, "O"))
-		out->conv = CONV_OCT | NUMERIC;
+		out->conv = COCT | NUMERIC;
 	else if (ft_seekstr(s, "u")
 		|| ft_seekstr(s, "U"))
-		out->conv = CONV_UINT | NUMERIC;
+		out->conv = CUINT | NUMERIC;
 	else if (ft_seekstr(s, "x"))
-		out->conv = CONV_HEXL | NUMERIC;
+		out->conv = CHEXL | NUMERIC;
 	else if (ft_seekstr(s, "X"))
-		out->conv = CONV_HEXU | NUMERIC;
+		out->conv = CHEXU | NUMERIC;
 	else if (ft_seekstr(s, "c"))
-		out->conv = CONV_CHAR | STRING;
+		out->conv = CCHAR | STRING;
 	else if (ft_seekstr(s, "C"))
-		out->conv = CONV_WCHAR | STRING;
+		out->conv = CWCHAR | STRING;
 }
 
 /*

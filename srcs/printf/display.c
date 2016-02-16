@@ -13,116 +13,108 @@
 #include "ft_printf.h"
 
 /*
-** TODO: Properly prefix decimal numbers
+** TODO: Properly prefix negative numbers
 */
 
-static void		include_prefix(t_buffer *buf, t_format *in, int skip, char *pre)
+static void		prepad_prefix(t_buffer *buf, t_format *in, int skip, char *pre)
 {
 	size_t	len;
 
+	pad_buffer(buf, in, MISSING, skip);
 	len = ft_strlen(pre);
 	skip += len;
 	if (in->prec == MISSING && (in->flags & ZPAD) && !(in->flags & NEGF))
 	{
 		pad_buffer(buf, in, skip, MISSING);
 		write_to_buffer(buf, PREPEND, len, pre);
+		return ;
 	}
-	else
-	{
-		write_to_buffer(buf, PREPEND, len, pre);
-		pad_buffer(buf, in, skip, MISSING);
-	}
+	write_to_buffer(buf, PREPEND, len, pre);
+	pad_buffer(buf, in, skip, MISSING);
 }
-
-void		display_as_dec(t_buffer *buf, t_format *in, size_t arg)
++0042
+  +42
+void			display_as_dec(t_buffer *buf, t_format *in, size_t arg)
 {
+	int		sign;
 	char	*out;
 	int		len;
 
-	if (in->conv & CONV_UINT)
+	if (in->conv & CUINT)
 		out = ft_uitoa64(arg);
-	else if (in->conv & CONV_OCT)
+	else if (in->conv & COCT)
 		out = ft_uitoa_base64(arg, 8);
 	else
 		out = ft_itoa64(arg);
-	if (out == NULL)
-		return ;
+	sign = ft_seekstr((const char**)&out, "-") ? 1 : 0;
 	len = ft_strlen(out);
 	if (in->prec == MISSING || arg)
 		write_to_buffer(buf, APPEND, len, out);
-	pad_buffer(buf, in, MISSING, len);
-	if ((in->flags & ALT) && (in->conv & CONV_OCT))
-		include_prefix(buf, in, len, "0");
-	else if ((in->flags & SIGN) && *out != '-')
-		include_prefix(buf, in, len, "+");
-	else if ((in->flags & BLANK) && *out != '-')
-		include_prefix(buf, in, len, " ");
+	if ((in->conv & COCT) && (in->flags & ALT))
+		prepad_prefix(buf, in, len, "0");
+	else if ((in->conv & CINT) && (in->flags & SIGN) && *out != '-')
+		prepad_prefix(buf, in, len, sign ? "-" : "+");
+	else if ((in->conv & CINT) && (in->flags & BLANK) && *out != '-')
+		prepad_prefix(buf, in, len, " ");
 	else
-		pad_buffer(buf, in, len, MISSING);
+		prepad_prefix(buf, in, len, sign ? "-" : "");
+	if (sign)
+		out--;
 	free(out);
 }
 
-void		display_as_hex(t_buffer *buf, t_format *in, size_t arg)
+void			display_as_hex(t_buffer *buf, t_format *in, size_t arg)
 {
 	char	*out;
 	int		len;
 
-	if ((out = ft_uitoa_base64(arg & in->modif, 16)) == NULL)
-		return ;
+	out = ft_uitoa_base64(arg & in->modif, 16);
 	len = ft_strlen(out);
-	if (in->conv & CONV_HEXU)
+	if (in->conv & CHEXU)
 		ft_strupcase(out);
 	if (in->prec == MISSING || arg)
 		write_to_buffer(buf, APPEND, len, out);
 	if ((in->flags & ALT) && arg)
-	{
-		pad_buffer(buf, in, MISSING, len);
-		if (in->conv & CONV_HEXU)
-			include_prefix(buf, in, len, "X0");
-		else
-			include_prefix(buf, in, len, "x0");
-	}
+		prepad_prefix(buf, in, len, (in->conv & CHEXU) ? "X0" : "x0");
 	else
 		pad_buffer(buf, in, len, len);
+	free(out);
 }
 
-void		display_as_ptr(t_buffer *buf, t_format *in, size_t arg)
+void			display_as_ptr(t_buffer *buf, t_format *in, size_t arg)
 {
 	char	*out;
 	int		len;
 
-	if (arg == 0)
-		out = "(null)";
-	else if ((out = ft_uitoa_base64(arg & in->modif, 16)) == NULL)
-		return ;
+	out = arg == 0 ? "(null)" : ft_uitoa_base64(arg & in->modif, 16);
 	len = ft_strlen(out);
 	write_to_buffer(buf, APPEND, len, out);
 	pad_buffer(buf, in, len, len);
 	free(out);
 }
 
-void		display_as_str(t_buffer *buf, t_format *in, size_t arg)
+void			display_as_str(t_buffer *buf, t_format *in, size_t arg)
 {
 	char	*out;
 	int		len;
 
-	if (in->conv & (CONV_CHAR | CONV_WCHAR))
+	if (in->conv & (CCHAR | CWCHAR))
 	{
 		out = (char*)&arg;
-		if (in->conv & CONV_CHAR)
+		if (in->conv & CCHAR)
 			write_to_buffer(buf, APPEND, sizeof(char), out);
-		else if (in->conv & CONV_WCHAR)
+		else if (in->conv & CWCHAR)
 			write_to_buffer(buf, APPEND, sizeof(wchar_t), out);
 		pad_buffer(buf, in, 1, MISSING);
 		return ;
 	}
-	out = arg == 0 ?"(null)" : (char*)arg;
+	out = arg == 0 ? "(null)" : (char*)arg;
 	len = ft_strlen(out);
 	if (in->prec != MISSING)
 		len = ft_min(in->prec, len);
-	if (in->conv & CONV_STR)
+	if (in->conv & CSTR)
 		write_to_buffer(buf, APPEND, sizeof(char) * len, out);
-	else if (in->conv & CONV_WSTR)
+	else if (in->conv & CWSTR)
 		write_to_buffer(buf, APPEND, sizeof(wchar_t) * len, out);
 	if (arg == 0)
 		buf->written -= 2;

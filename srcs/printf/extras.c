@@ -91,7 +91,10 @@ void		parse_extras(t_buffer *in, const char **format)
 	while (1)
 	{
 		if (ft_seekstr(format, "**fd:"))
+		{
+			flush_to_stdout(in);
 			in->fd = get_file_descriptor(format);
+		}
 		else if (ft_seekstr(format, "{"))
 		{
 			out = get_output_color(format);
@@ -103,7 +106,7 @@ void		parse_extras(t_buffer *in, const char **format)
 				free(out);
 			}
 			else if (ft_seekstr(format, "}"))
-		 		write_to_buffer(in, APPEND, ft_strlen(out), out);
+				write_to_buffer(in, APPEND, ft_strlen(out), out);
 		}
 		else
 			break ;

@@ -23,28 +23,25 @@
 # define SIGN	0x08
 # define NEGF	0x10
 
-# define CONV_INT	0x001
-# define CONV_STR	0x002
-# define CONV_WSTR	0x004
-# define CONV_PTR	0x008
-# define CONV_OCT	0x010
-# define CONV_UINT	0x020
-# define CONV_HEXL	0x040
-# define CONV_HEXU	0x080
-# define CONV_CHAR	0x100
-# define CONV_WCHAR	0x200
+# define CINT	0x001
+# define CSTR	0x002
+# define CWSTR	0x004
+# define CPTR	0x008
+# define COCT	0x010
+# define CUINT	0x020
+# define CHEXL	0x040
+# define CHEXU	0x080
+# define CCHAR	0x100
+# define CWCHAR	0x200
 
 # define NUMERIC	0x1000
 # define STRING		0x2000
 # define POINTER	0x4000
 
+# define MISSING	-1
+
 # define APPEND		1
 # define PREPEND	2
-
-# define PRECISION	1
-# define FIELDWIDTH	2
-
-# define MISSING	-1
 
 typedef struct	s_buffer
 {
@@ -65,6 +62,7 @@ typedef struct	s_format
 }				t_format;
 
 int				ft_printf(const char *format, ...);
+int				flush_to_stdout(t_buffer *in);
 void			write_to_buffer(t_buffer *in, int mode, int len, const char *s);
 void			get_flags(t_format *out, const char **s);
 void			get_precision(t_format *out, const char **s);

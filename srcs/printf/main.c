@@ -12,19 +12,6 @@
 
 #include "ft_printf.h"
 
-static int	flush_to_stdout(t_buffer *in)
-{
-	int		len;
-
-	len = in->len;
-	if (len < 1 || in->data == NULL)
-		return (0);
-	write(in->fd, in->data, len);
-	in->written += len;
-	in->len = 0;
-	return (len);
-}
-
 static void	format_argument(t_buffer *in, const char **s, size_t arg)
 {
 	t_format	format;
@@ -36,7 +23,7 @@ static void	format_argument(t_buffer *in, const char **s, size_t arg)
 	get_conversion(&format, s);
 	if (format.conv & STRING)
 		display_as_str(in, &format, arg);
-	else if (format.conv & (CONV_HEXL | CONV_HEXU))
+	else if (format.conv & (CHEXL | CHEXU))
 		display_as_hex(in, &format, sign_extend(&format, arg));
 	else if (format.conv & NUMERIC)
 		display_as_dec(in, &format, sign_extend(&format, arg));
@@ -49,6 +36,19 @@ static void	format_argument(t_buffer *in, const char **s, size_t arg)
 	}
 }
 
+int			flush_to_stdout(t_buffer *in)
+{
+	int		len;
+
+	len = in->len;
+	if (len < 1 || in->data == NULL)
+		return (0);
+	write(in->fd, in->data, len);
+	in->written += len;
+	in->len = 0;
+	return (len);
+}
+
 void		pad_buffer(t_buffer *buf, t_format *in, int fpad, int ppad)
 {
 	char	*style;
@@ -57,7 +57,7 @@ void		pad_buffer(t_buffer *buf, t_format *in, int fpad, int ppad)
 	mode = PREPEND;
 	if (in->flags & NEGF)
 		mode = APPEND;
-	style = in->conv & STRING ?" ": "0";
+	style = in->conv & STRING ? " " : "0";
 	while (ppad >= 0 && in->prec > ppad)
 	{
 		write_to_buffer(buf, PREPEND, 1, style);
@@ -66,7 +66,7 @@ void		pad_buffer(t_buffer *buf, t_format *in, int fpad, int ppad)
 		in->prec--;
 	}
 	style = !(in->flags & ZPAD) || (in->flags & NEGF)
-		|| (in->prec != MISSING && (in->conv & NUMERIC)) ?" " :"0";
+		|| (in->prec != MISSING && (in->conv & NUMERIC)) ? " " : "0";
 	while (fpad >= 0 && in->field > fpad)
 	{
 		write_to_buffer(buf, mode, 1, style);
