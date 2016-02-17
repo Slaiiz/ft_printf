@@ -56,7 +56,7 @@ void		get_precision(t_format *out, const char **s)
 			out->prec = 0;
 	}
 	else
-		out->prec = MISSING;
+		out->prec = -1;
 	*s = data;
 }
 

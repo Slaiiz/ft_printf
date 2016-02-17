@@ -38,8 +38,6 @@
 # define STRING		0x2000
 # define POINTER	0x4000
 
-# define MISSING	-1
-
 # define APPEND		1
 # define PREPEND	2
 

@@ -20,20 +20,19 @@ static void		prepad_prefix(t_buffer *buf, t_format *in, int skip, char *pre)
 {
 	size_t	len;
 
-	pad_buffer(buf, in, MISSING, skip);
+	pad_buffer(buf, in, -1, skip);
 	len = ft_strlen(pre);
 	skip += len;
-	if (in->prec == MISSING && (in->flags & ZPAD) && !(in->flags & NEGF))
+	if (in->prec == -1 && (in->flags & ZPAD) && !(in->flags & NEGF))
 	{
-		pad_buffer(buf, in, skip, MISSING);
+		pad_buffer(buf, in, skip, -1);
 		write_to_buffer(buf, PREPEND, len, pre);
 		return ;
 	}
 	write_to_buffer(buf, PREPEND, len, pre);
-	pad_buffer(buf, in, skip, MISSING);
+	pad_buffer(buf, in, skip, -1);
 }
-+0042
-  +42
+
 void			display_as_dec(t_buffer *buf, t_format *in, size_t arg)
 {
 	int		sign;
@@ -48,7 +47,7 @@ void			display_as_dec(t_buffer *buf, t_format *in, size_t arg)
 		out = ft_itoa64(arg);
 	sign = ft_seekstr((const char**)&out, "-") ? 1 : 0;
 	len = ft_strlen(out);
-	if (in->prec == MISSING || arg)
+	if (in->prec == -1 || arg)
 		write_to_buffer(buf, APPEND, len, out);
 	if ((in->conv & COCT) && (in->flags & ALT))
 		prepad_prefix(buf, in, len, "0");
@@ -72,7 +71,7 @@ void			display_as_hex(t_buffer *buf, t_format *in, size_t arg)
 	len = ft_strlen(out);
 	if (in->conv & CHEXU)
 		ft_strupcase(out);
-	if (in->prec == MISSING || arg)
+	if (in->prec == -1 || arg)
 		write_to_buffer(buf, APPEND, len, out);
 	if ((in->flags & ALT) && arg)
 		prepad_prefix(buf, in, len, (in->conv & CHEXU) ? "X0" : "x0");
@@ -105,12 +104,12 @@ void			display_as_str(t_buffer *buf, t_format *in, size_t arg)
 			write_to_buffer(buf, APPEND, sizeof(char), out);
 		else if (in->conv & CWCHAR)
 			write_to_buffer(buf, APPEND, sizeof(wchar_t), out);
-		pad_buffer(buf, in, 1, MISSING);
+		pad_buffer(buf, in, 1, -1);
 		return ;
 	}
 	out = arg == 0 ? "(null)" : (char*)arg;
 	len = ft_strlen(out);
-	if (in->prec != MISSING)
+	if (in->prec != -1)
 		len = ft_min(in->prec, len);
 	if (in->conv & CSTR)
 		write_to_buffer(buf, APPEND, sizeof(char) * len, out);
@@ -118,5 +117,5 @@ void			display_as_str(t_buffer *buf, t_format *in, size_t arg)
 		write_to_buffer(buf, APPEND, sizeof(wchar_t) * len, out);
 	if (arg == 0)
 		buf->written -= 2;
-	pad_buffer(buf, in, len, MISSING);
+	pad_buffer(buf, in, len, -1);
 }

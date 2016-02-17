@@ -66,7 +66,7 @@ void		pad_buffer(t_buffer *buf, t_format *in, int fpad, int ppad)
 		in->prec--;
 	}
 	style = !(in->flags & ZPAD) || (in->flags & NEGF)
-		|| (in->prec != MISSING && (in->conv & NUMERIC)) ? " " : "0";
+		|| (in->prec != -1 && (in->conv & NUMERIC)) ? " " : "0";
 	while (fpad >= 0 && in->field > fpad)
 	{
 		write_to_buffer(buf, mode, 1, style);
