@@ -45,15 +45,14 @@ void			display_as_dec(t_buffer *buf, t_format *in, size_t arg)
 		out = ft_uitoa_base64(arg, 8);
 	else
 		out = ft_itoa64(arg);
-	sign = ft_seekstr((const char**)&out, "-") ? 1 : 0;
-	len = ft_strlen(out);
-	if (in->prec == -1 || arg)
-		write_to_buffer(buf, APPEND, len, out);
+	sign = ft_seekstr((const char**)&out, "-");
+	len = in->prec != 1 && !arg ? 0 : ft_strlen(out);
+	write_to_buffer(buf, APPEND, len, out);
 	if ((in->conv & COCT) && (in->flags & ALT))
 		prepad_prefix(buf, in, len, "0");
-	else if ((in->conv & CINT) && (in->flags & SIGN) && *out != '-')
-		prepad_prefix(buf, in, len, sign ? "-" : "+");
-	else if ((in->conv & CINT) && (in->flags & BLANK) && *out != '-')
+	else if ((in->conv & CINT) && (in->flags & SIGN) && !sign)
+		prepad_prefix(buf, in, len, "+");
+	else if ((in->conv & CINT) && (in->flags & BLANK) && !sign)
 		prepad_prefix(buf, in, len, " ");
 	else
 		prepad_prefix(buf, in, len, sign ? "-" : "");
@@ -68,7 +67,7 @@ void			display_as_hex(t_buffer *buf, t_format *in, size_t arg)
 	int		len;
 
 	out = ft_uitoa_base64(arg & in->modif, 16);
-	len = ft_strlen(out);
+	len = in->prec != 1 && !arg ? 0 : ft_strlen(out);
 	if (in->conv & CHEXU)
 		ft_strupcase(out);
 	if (in->prec == -1 || arg)

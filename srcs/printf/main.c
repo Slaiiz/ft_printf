@@ -25,6 +25,8 @@ static void	format_argument(t_buffer *in, const char **s, size_t arg)
 		display_as_str(in, &format, arg);
 	else if (format.conv & (CHEXL | CHEXU))
 		display_as_hex(in, &format, sign_extend(&format, arg));
+	else if (format.conv & (CUINT | COCT))
+		display_as_dec(in, &format, arg);
 	else if (format.conv & NUMERIC)
 		display_as_dec(in, &format, sign_extend(&format, arg));
 	else if (format.conv & POINTER)
