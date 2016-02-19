@@ -6,7 +6,7 @@
 /*   By: vchesnea <vchesnea@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/00/06 14:55:05 by vchesnea          #+#    #+#             */
-/*   Updated: 2016/00/06 14:55:05 by vchesnea         ###   ########.fr       */
+/*   Updated: 2016/02/19 12:06:56 by vchesnea         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,8 +52,6 @@ void		get_precision(t_format *out, const char **s)
 			data++;
 		if (data != *s)
 			out->prec = ft_atoi(*s);
-		else
-			out->prec = 0;
 	}
 	else
 		out->prec = -1;

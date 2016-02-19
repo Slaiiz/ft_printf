@@ -6,7 +6,7 @@
 /*   By: vchesnea <vchesnea@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/00/06 13:52:17 by vchesnea          #+#    #+#             */
-/*   Updated: 2016/00/06 13:52:17 by vchesnea         ###   ########.fr       */
+/*   Updated: 2016/02/19 12:07:19 by vchesnea         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ static void	format_argument(t_buffer *in, const char **s, size_t arg)
 		display_as_ptr(in, &format, arg);
 	else if (**s == '%')
 	{
-		write_to_buffer(in, APPEND, 1, *s++);
+		write_to_buffer(in, APPEND, 1, (*s)++);
 		return (pad_buffer(in, &format, 1, 1));
 	}
 }

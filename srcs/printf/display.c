@@ -12,10 +12,6 @@
 
 #include "ft_printf.h"
 
-/*
-** TODO: Properly prefix negative numbers
-*/
-
 static void		prepad_prefix(t_buffer *buf, t_format *in, int skip, char *pre)
 {
 	size_t	len;
@@ -46,7 +42,7 @@ void			display_as_dec(t_buffer *buf, t_format *in, size_t arg)
 	else
 		out = ft_itoa64(arg);
 	sign = ft_seekstr((const char**)&out, "-");
-	len = in->prec != 1 && !arg ? 0 : ft_strlen(out);
+	len = in->prec == -1 || arg ? ft_strlen(out) : 0;
 	write_to_buffer(buf, APPEND, len, out);
 	if ((in->conv & COCT) && (in->flags & ALT))
 		prepad_prefix(buf, in, len, "0");
@@ -67,7 +63,7 @@ void			display_as_hex(t_buffer *buf, t_format *in, size_t arg)
 	int		len;
 
 	out = ft_uitoa_base64(arg & in->modif, 16);
-	len = in->prec != 1 && !arg ? 0 : ft_strlen(out);
+	len = in->prec == -1 || arg ? ft_strlen(out) : 0;
 	if (in->conv & CHEXU)
 		ft_strupcase(out);
 	if (in->prec == -1 || arg)
