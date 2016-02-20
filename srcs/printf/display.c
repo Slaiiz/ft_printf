@@ -36,9 +36,9 @@ void			display_as_dec(t_buffer *buf, t_format *in, size_t arg)
 	int		len;
 
 	if (in->conv & CUINT)
-		out = ft_uitoa64(arg);
+		out = ft_uitoa64(arg & in->modif);
 	else if (in->conv & COCT)
-		out = ft_uitoa_base64(arg, 8);
+		out = ft_uitoa_base64(arg & in->modif, 8);
 	else
 		out = ft_itoa64(arg);
 	sign = ft_seekstr((const char**)&out, "-");
@@ -103,7 +103,7 @@ void			display_as_str(t_buffer *buf, t_format *in, size_t arg)
 		return ;
 	}
 	out = arg == 0 ? "(null)" : (char*)arg;
-	len = ft_strlen(out);
+	len = in->conv & CWSTR ? ft_wstrlen((wchar_t*)out) : ft_strlen(out);
 	if (in->prec != -1)
 		len = ft_min(in->prec, len);
 	if (in->conv & CSTR)

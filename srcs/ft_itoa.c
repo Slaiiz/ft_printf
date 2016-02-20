@@ -20,8 +20,9 @@ char	*ft_itoa(int n)
 	unsigned int	count;
 	char			*out;
 
-	negative = n < 0;
-	if (negative)
+	if (n == (int)0x80000000)
+		return ("-2147483648");
+	if ((negative = n < 0))
 		n = -n;
 	count = 0;
 	while (1)

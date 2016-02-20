@@ -124,5 +124,7 @@ int			ft_printf(const char *format, ...)
 		}
 	}
 	flush_to_stdout(&buffer);
+	if (buffer.size)
+		free(buffer.data);
 	return (buffer.written);
 }

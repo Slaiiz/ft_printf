@@ -20,8 +20,9 @@ char	*ft_itoa64(long n)
 	unsigned int	count;
 	char			*out;
 
-	negative = n < 0;
-	if (negative)
+	if (n == (long)0x8000000000000000)
+		return (ft_strdup("-9223372036854775808"));
+	if ((negative = n < 0))
 		n = -n;
 	count = 0;
 	while (1)

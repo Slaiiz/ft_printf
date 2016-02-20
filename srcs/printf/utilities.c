@@ -91,14 +91,14 @@ void		get_conversion(t_format *out, const char **s)
 	else if (ft_seekstr(s, "p"))
 		out->conv = CPTR | POINTER;
 	else if (ft_seekstr(s, "d")
-		|| ft_seekstr(s, "D")
-		|| ft_seekstr(s, "i"))
+		|| ft_seekstr(s, "i")
+		|| (ft_seekstr(s, "D") && (out->modif = 0xffffffffffffffff)))
 		out->conv = CINT | NUMERIC;
 	else if (ft_seekstr(s, "o")
-		|| ft_seekstr(s, "O"))
+		|| (ft_seekstr(s, "O") && (out->modif = 0xffffffffffffffff)))
 		out->conv = COCT | NUMERIC;
 	else if (ft_seekstr(s, "u")
-		|| ft_seekstr(s, "U"))
+		|| (ft_seekstr(s, "U") && (out->modif = 0xffffffffffffffff)))
 		out->conv = CUINT | NUMERIC;
 	else if (ft_seekstr(s, "x"))
 		out->conv = CHEXL | NUMERIC;
