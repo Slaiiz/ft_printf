@@ -94,7 +94,7 @@ void		write_to_buffer(t_buffer *in, int mode, int len, const char *s)
 	}
 	if (mode & PREPEND)
 	{
-		ft_memcpy(in->data + len, in->data, in->len);
+		ft_memmove(in->data + len, in->data, in->len);
 		ft_memcpy(in->data, s, len);
 	}
 	else if (mode & APPEND)
@@ -112,11 +112,9 @@ int			ft_printf(const char *format, ...)
 	buffer.fd = 1;
 	while (*format != '\0')
 	{
+		parse_extras(&buffer, &format);
 		if (!ft_seekstr(&format, "%"))
-		{
-			parse_extras(&buffer, &format);
 			write_to_buffer(&buffer, APPEND, 1, format++);
-		}
 		else
 		{
 			flush_to_stdout(&buffer);

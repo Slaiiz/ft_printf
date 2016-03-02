@@ -69,7 +69,7 @@ void			display_as_hex(t_buffer *buf, t_format *in, size_t arg)
 	if (in->prec == -1 || arg)
 		write_to_buffer(buf, APPEND, len, out);
 	if ((in->flags & ALT) && arg)
-		prepad_prefix(buf, in, len, (in->conv & CHEXU) ? "X0" : "x0");
+		prepad_prefix(buf, in, len, (in->conv & CHEXU) ? "0X" : "0x");
 	else
 		pad_buffer(buf, in, len, len);
 	free(out);
@@ -85,7 +85,7 @@ void			display_as_ptr(t_buffer *buf, t_format *in, size_t arg)
 	write_to_buffer(buf, APPEND, len, out);
 	if (arg != 0)
 	{
-		prepad_prefix(buf, in, len, "x0");
+		prepad_prefix(buf, in, len, "0x");
 		free(out);
 	}
 }

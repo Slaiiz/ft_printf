@@ -77,11 +77,15 @@ static char	*get_font_modifier(const char **in)
 static int	get_file_descriptor(const char **in)
 {
 	const char	*tmp;
+	int			out;
 
 	tmp = *in;
 	while (ft_isdigit(**in))
 		(*in)++;
-	return (ft_atoi(tmp));
+	out = ft_atoi(tmp);
+	if (!ft_seekstr(in, "**"))
+		return (1);
+	return (out);
 }
 
 void		parse_extras(t_buffer *in, const char **format)
