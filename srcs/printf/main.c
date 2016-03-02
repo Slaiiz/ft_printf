@@ -80,28 +80,26 @@ void		write_to_buffer(t_buffer *in, int mode, int len, const char *s)
 {
 	char	*new;
 
-	while (len--)
+	if (in->size < (in->len + len))
 	{
-		if (in->len == in->size)
+		if ((new = malloc(sizeof(char) * (in->size + len + 32))) == NULL)
+			return ;
+		if (in->data != NULL)
 		{
-			if ((new = malloc(sizeof(char) * (in->size + 32))) == NULL)
-				return ;
-			if (in->data != NULL)
-			{
-				ft_memcpy(new, in->data, in->len);
-				free(in->data);
-			}
-			in->data = new;
-			in->size += 32;
+			ft_memcpy(new, in->data, in->len);
+			free(in->data);
 		}
-		if (mode & PREPEND)
-		{
-			ft_memmove(in->data + 1, in->data, in->len++);
-			*(in->data + 0) = *s++;
-		}
-		else if (mode & APPEND)
-			*(in->data + in->len++) = *s++;
+		in->size += len + 32;
+		in->data = new;
 	}
+	if (mode & PREPEND)
+	{
+		ft_memcpy(in->data + len, in->data, in->len);
+		ft_memcpy(in->data, s, len);
+	}
+	else if (mode & APPEND)
+		ft_memcpy(in->data + in->len, s, len);
+	in->len += len;
 }
 
 int			ft_printf(const char *format, ...)
@@ -114,9 +112,11 @@ int			ft_printf(const char *format, ...)
 	buffer.fd = 1;
 	while (*format != '\0')
 	{
-		parse_extras(&buffer, &format);
 		if (!ft_seekstr(&format, "%"))
+		{
+			parse_extras(&buffer, &format);
 			write_to_buffer(&buffer, APPEND, 1, format++);
+		}
 		else
 		{
 			flush_to_stdout(&buffer);
