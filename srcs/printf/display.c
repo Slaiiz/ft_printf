@@ -80,14 +80,11 @@ void			display_as_ptr(t_buffer *buf, t_format *in, size_t arg)
 	char	*out;
 	int		len;
 
-	out = arg == 0 ? "(null)" : ft_uitoa_base64(arg, 16);
+	out = ft_uitoa_base64(arg, 16);
 	len = ft_strlen(out);
 	write_to_buffer(buf, APPEND, len, out);
-	if (arg != 0)
-	{
-		prepad_prefix(buf, in, len, "0x");
-		free(out);
-	}
+	prepad_prefix(buf, in, len, "0x");
+	free(out);
 }
 
 void			display_as_str(t_buffer *buf, t_format *in, size_t arg)

@@ -99,17 +99,17 @@ void		parse_extras(t_buffer *in, const char **format)
 			flush_to_stdout(in);
 			in->fd = get_file_descriptor(format);
 		}
-		else if (ft_seekstr(format, "{"))
+		else if (ft_seekstr(format, "{{"))
 		{
 			out = get_output_color(format);
 			if (ft_seekstr(format, ";"))
 			{
 				out = ft_strjoin(out, get_font_modifier(format));
-				if (ft_seekstr(format, "}"))
+				if (ft_seekstr(format, "}}"))
 					write_to_buffer(in, APPEND, ft_strlen(out), out);
 				free(out);
 			}
-			else if (ft_seekstr(format, "}"))
+			else if (ft_seekstr(format, "}}"))
 				write_to_buffer(in, APPEND, ft_strlen(out), out);
 		}
 		else
