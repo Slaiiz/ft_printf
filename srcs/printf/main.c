@@ -31,16 +31,16 @@ static void	format_argument(t_buffer *in, const char **s, size_t arg)
 		display_as_dec(in, &format, sign_extend(&format, arg));
 	else if (format.conv & POINTER)
 		display_as_ptr(in, &format, arg);
-	else if (**s == '%')
+	else
 	{
 		write_to_buffer(in, APPEND, 1, (*s)++);
-		return (pad_buffer(in, &format, 1, 1));
+		pad_buffer(in, &format, 1, 1);
 	}
 }
 
 int			flush_to_stdout(t_buffer *in)
 {
-	int		len;
+	int	len;
 
 	len = in->len;
 	if (len < 1 || in->data == NULL)
@@ -104,8 +104,8 @@ void		write_to_buffer(t_buffer *in, int mode, int len, const char *s)
 
 int			ft_printf(const char *format, ...)
 {
-	t_buffer		buffer;
-	va_list			argp;
+	t_buffer	buffer;
+	va_list		argp;
 
 	ft_bzero(&buffer, sizeof(t_buffer));
 	va_start(argp, format);

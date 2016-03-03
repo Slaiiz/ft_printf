@@ -2,7 +2,7 @@
 
 int	main(void)
 {
-	ft_printf("{{eoc;}}[{{red;b}}VALUE{{white;}}: {{green;u}}%.5X{{eoc;}}]\n", 230);
-	ft_printf("%30000s\n", "@");
+	printf("%d\n", printf("%s", NULL));
+	ft_printf("%d\n", ft_printf("%s", NULL));
 	return (0);
 }

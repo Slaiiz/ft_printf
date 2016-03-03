@@ -95,22 +95,14 @@ void			display_as_str(t_buffer *buf, t_format *in, size_t arg)
 	if (in->conv & (CCHAR | CWCHAR))
 	{
 		out = (char*)&arg;
-		if (in->conv & CCHAR)
-			write_to_buffer(buf, APPEND, sizeof(char), out);
-		else if (in->conv & CWCHAR)
-			write_to_buffer(buf, APPEND, sizeof(wchar_t), out);
+		write_to_buffer(buf, APPEND, sizeof(char), out);
 		pad_buffer(buf, in, 1, -1);
 		return ;
 	}
 	out = arg == 0 ? "(null)" : (char*)arg;
-	len = in->conv & CWSTR ? ft_wstrlen((wchar_t*)out) : ft_strlen(out);
+	len = ft_strlen(out);
 	if (in->prec != -1)
 		len = ft_min(in->prec, len);
-	if (in->conv & CSTR)
-		write_to_buffer(buf, APPEND, sizeof(char) * len, out);
-	else if (in->conv & CWSTR)
-		write_to_buffer(buf, APPEND, sizeof(wchar_t) * len, out);
-	if (arg == 0)
-		buf->written -= 2;
+	write_to_buffer(buf, APPEND, sizeof(char) * len, out);
 	pad_buffer(buf, in, len, -1);
 }

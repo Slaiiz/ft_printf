@@ -43,5 +43,14 @@ int	main(void)
 	ft_printf("@moulitest: %5.x, %5.0x", 0, 0);
 	ft_printf(">>%x\n", 0);
 	ft_printf(">>%x\n", 1);
+	ft_printf("---->%0.9dy\n", 42);
+	ft_printf("{{blue;u}}+{{red;b}}---------------+\n");
+	ft_printf("|{{eoc;}}%-15s{{red;b}}|\n", "make");
+	ft_printf("|{{blue;x}}%15s{{red;b}}|\n", "all");
+	ft_printf("|{{green;b}}%-15s{{red;b}}|\n", "clean");
+	ft_printf("|{{yellow;u}}%15s{{red;b}}|\n", "fclean");
+	ft_printf("|{{cyan}}%0-15s{{red;b}}|\n", "_foo_");
+	ft_printf("|{{magenta;}}%015s{{red;}}|\n", "_bar_");
+	ft_printf("+---------------{{blue;u}}+\n");
 	return (0);
 }
