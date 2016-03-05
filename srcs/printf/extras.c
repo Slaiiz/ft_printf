@@ -74,18 +74,25 @@ static char	*get_font_modifier(const char **in)
 	return (ft_strcat(output, "m"));
 }
 
-static int	get_file_descriptor(const char **in)
+static void	process_command(t_buffer *in, const char **format)
 {
-	int			out;
-	const char	*tmp;
-
-	tmp = *in;
-	while (ft_isdigit(**in))
-		(*in)++;
-	out = ft_atoi(tmp);
-	if (!ft_seekstr(in, "**"))
-		return (1);
-	return (out);
+	if (ft_seekstr(format, "clear"))
+		write_to_buffer(in, APPEND, 4, "\x1b[2J");
+	else if (ft_seekstr(format, "left"))
+		write_to_buffer(in, APPEND, 4, "\x1b[1D");
+	else if (ft_seekstr(format, "up"))
+		write_to_buffer(in, APPEND, 4, "\x1b[1A");
+	else if (ft_seekstr(format, "right"))
+		write_to_buffer(in, APPEND, 4, "\x1b[1C");
+	else if (ft_seekstr(format, "down"))
+		write_to_buffer(in, APPEND, 4, "\x1b[1B");
+	else if (ft_seekstr(format, "fd="))
+	{
+		in->fd = ft_atoi(*format);
+		while (ft_isdigit(**format))
+			(*format)++;
+	}
+	ft_seekstr(format, "^");
 }
 
 void		parse_extras(t_buffer *in, const char **format)
@@ -94,11 +101,8 @@ void		parse_extras(t_buffer *in, const char **format)
 
 	while (1)
 	{
-		if (ft_seekstr(format, "**fd:"))
-		{
-			flush_to_stdout(in);
-			in->fd = get_file_descriptor(format);
-		}
+		if (ft_seekstr(format, "#!"))
+			process_command(in, format);
 		else if (ft_seekstr(format, "{{"))
 		{
 			out = get_output_color(format);
