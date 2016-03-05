@@ -114,7 +114,10 @@ int			ft_printf(const char *format, ...)
 	{
 		parse_extras(&buffer, &format);
 		if (!ft_seekstr(&format, "%"))
-			write_to_buffer(&buffer, APPEND, 1, format++);
+		{
+			if (*format)
+				write_to_buffer(&buffer, APPEND, 1, format++);
+		}
 		else
 		{
 			flush_to_stdout(&buffer);
