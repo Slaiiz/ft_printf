@@ -14,8 +14,8 @@
 
 void		get_flags(t_format *out, const char **s)
 {
-	char	flags;
 	char	ch;
+	char	flags;
 
 	flags = 0x00;
 	while ((ch = **s) != '\0')

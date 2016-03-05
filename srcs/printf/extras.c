@@ -18,9 +18,9 @@
 
 static char	*get_output_color(const char **in)
 {
-	static char	*colors[10];
-	static char	*output;
 	int			index;
+	static char	*output;
+	static char	*colors[10];
 
 	if (output == NULL)
 	{
@@ -60,24 +60,24 @@ static char	*get_font_modifier(const char **in)
 	while (1)
 	{
 		if (ft_seekstr(in, "b"))
-			ft_strcat(output, "1");
+			ft_strlcat(output, "1", 24);
 		else if (ft_seekstr(in, "i"))
-			ft_strcat(output, "3");
+			ft_strlcat(output, "3", 24);
 		else if (ft_seekstr(in, "u"))
-			ft_strcat(output, "4");
+			ft_strlcat(output, "4", 24);
 		else if (ft_seekstr(in, "x"))
-			ft_strcat(output, "5");
+			ft_strlcat(output, "5", 24);
 		if (!ft_isalpha(**in))
 			break ;
-		ft_strcat(output, ";");
+		ft_strlcat(output, ";", 24);
 	}
 	return (ft_strcat(output, "m"));
 }
 
 static int	get_file_descriptor(const char **in)
 {
-	const char	*tmp;
 	int			out;
+	const char	*tmp;
 
 	tmp = *in;
 	while (ft_isdigit(**in))

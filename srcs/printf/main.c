@@ -12,7 +12,7 @@
 
 #include "ft_printf.h"
 
-static void	format_argument(t_buffer *in, const char **s, size_t arg)
+static void	format_argument(t_buffer *in, const char **s, va_list argp)
 {
 	t_format	format;
 
@@ -22,15 +22,15 @@ static void	format_argument(t_buffer *in, const char **s, size_t arg)
 	get_modifier(&format, s);
 	get_conversion(&format, s);
 	if (format.conv & STRING)
-		display_as_str(in, &format, arg);
+		display_as_str(in, &format, va_arg(argp, size_t));
 	else if (format.conv & (CHEXL | CHEXU))
-		display_as_hex(in, &format, sign_extend(&format, arg));
+		display_as_hex(in, &format, sign_extend(&format, va_arg(argp, size_t)));
 	else if (format.conv & (CUINT | COCT))
-		display_as_dec(in, &format, arg);
+		display_as_dec(in, &format, va_arg(argp, size_t));
 	else if (format.conv & NUMERIC)
-		display_as_dec(in, &format, sign_extend(&format, arg));
+		display_as_dec(in, &format, sign_extend(&format, va_arg(argp, size_t)));
 	else if (format.conv & POINTER)
-		display_as_ptr(in, &format, arg);
+		display_as_ptr(in, &format, va_arg(argp, size_t));
 	else
 	{
 		write_to_buffer(in, APPEND, 1, (*s)++);
@@ -53,8 +53,8 @@ int			flush_to_stdout(t_buffer *in)
 
 void		pad_buffer(t_buffer *buf, t_format *in, int fpad, int ppad)
 {
-	char	*style;
 	int		mode;
+	char	*style;
 
 	mode = PREPEND;
 	if (in->flags & NEGF)
@@ -104,8 +104,8 @@ void		write_to_buffer(t_buffer *in, int mode, int len, const char *s)
 
 int			ft_printf(const char *format, ...)
 {
-	t_buffer	buffer;
 	va_list		argp;
+	t_buffer	buffer;
 
 	ft_bzero(&buffer, sizeof(t_buffer));
 	va_start(argp, format);
@@ -118,7 +118,7 @@ int			ft_printf(const char *format, ...)
 		else
 		{
 			flush_to_stdout(&buffer);
-			format_argument(&buffer, &format, va_arg(argp, size_t));
+			format_argument(&buffer, &format, argp);
 		}
 	}
 	flush_to_stdout(&buffer);

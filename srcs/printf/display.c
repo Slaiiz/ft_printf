@@ -31,9 +31,9 @@ static void		prepad_prefix(t_buffer *buf, t_format *in, int skip, char *pre)
 
 void			display_as_dec(t_buffer *buf, t_format *in, size_t arg)
 {
+	int		len;
 	int		sign;
 	char	*out;
-	int		len;
 
 	if (in->conv & CUINT)
 		out = ft_uitoa64(arg & in->modif);
@@ -59,8 +59,8 @@ void			display_as_dec(t_buffer *buf, t_format *in, size_t arg)
 
 void			display_as_hex(t_buffer *buf, t_format *in, size_t arg)
 {
-	char	*out;
 	int		len;
+	char	*out;
 
 	out = ft_uitoa_base64(arg & in->modif, 16);
 	len = in->prec == -1 || arg ? ft_strlen(out) : 0;
@@ -77,8 +77,8 @@ void			display_as_hex(t_buffer *buf, t_format *in, size_t arg)
 
 void			display_as_ptr(t_buffer *buf, t_format *in, size_t arg)
 {
-	char	*out;
 	int		len;
+	char	*out;
 
 	out = ft_uitoa_base64(arg, 16);
 	len = ft_strlen(out);
@@ -89,8 +89,8 @@ void			display_as_ptr(t_buffer *buf, t_format *in, size_t arg)
 
 void			display_as_str(t_buffer *buf, t_format *in, size_t arg)
 {
-	char	*out;
 	int		len;
+	char	*out;
 
 	if (in->conv & (CCHAR | CWCHAR))
 	{
