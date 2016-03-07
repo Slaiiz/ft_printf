@@ -55,7 +55,7 @@ static char	*get_font_modifier(const char **in)
 	ft_strcat(output, "\033[22;23;24;25m");
 	if (!ft_isalpha(**in))
 		return (output);
-	ft_strcat(output, "\033[");
+	ft_strcat(output + sizeof(char) * 14, "\033[");
 	while (1)
 	{
 		if (ft_seekstr(in, "b"))
@@ -76,15 +76,15 @@ static char	*get_font_modifier(const char **in)
 static void	process_command(t_buffer *in, const char **format)
 {
 	if (ft_seekstr(format, "clear"))
-		write_to_buffer(in, APPEND, 8, "\x1b[2J\x1b[1D");
+		write_to_buffer(in, APPEND, 4, "\x1b[2J");
 	else if (ft_seekstr(format, "left"))
-		write_to_buffer(in, APPEND, 8, "\x1b[1D\x1b[1D");
+		write_to_buffer(in, APPEND, 4, "\x1b[1D");
 	else if (ft_seekstr(format, "up"))
-		write_to_buffer(in, APPEND, 8, "\x1b[1A\x1b[1D");
+		write_to_buffer(in, APPEND, 4, "\x1b[1A");
 	else if (ft_seekstr(format, "right"))
-		write_to_buffer(in, APPEND, 8, "\x1b[1C\x1b[1D");
+		write_to_buffer(in, APPEND, 4, "\x1b[1C");
 	else if (ft_seekstr(format, "down"))
-		write_to_buffer(in, APPEND, 8, "\x1b[1B\x1b[1D");
+		write_to_buffer(in, APPEND, 4, "\x1b[1B");
 	else if (ft_seekstr(format, "fd="))
 	{
 		in->fd = ft_atoi(*format);

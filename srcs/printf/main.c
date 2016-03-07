@@ -95,10 +95,10 @@ void		write_to_buffer(t_buffer *in, int mode, int len, const char *s)
 	if (mode & PREPEND)
 	{
 		ft_memmove(in->data + len, in->data, in->len);
-		ft_memcpy(in->data, s, len);
+		ft_strncpy(in->data, s, len);
 	}
 	else if (mode & APPEND)
-		ft_memcpy(in->data + in->len, s, len);
+		ft_strncpy(in->data + in->len, s, len);
 	in->len += len;
 }
 
