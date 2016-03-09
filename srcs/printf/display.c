@@ -44,7 +44,7 @@ void			display_as_dec(t_buffer *buf, t_format *in, size_t arg)
 	sign = ft_seekstr((const char**)&out, "-");
 	len = in->prec == -1 || arg ? ft_strlen(out) : 0;
 	write_to_buffer(buf, APPEND, len, out);
-	if ((in->conv & COCT) && (in->flags & ALT))
+	if ((in->conv & COCT) && (in->flags & ALT) && arg)
 		prepad_prefix(buf, in, len, "0");
 	else if ((in->conv & CINT) && (in->flags & SIGN) && !sign)
 		prepad_prefix(buf, in, len, "+");
