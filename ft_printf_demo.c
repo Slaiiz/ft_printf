@@ -6,7 +6,7 @@
 /*   By: vchesnea <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/03/07 14:25:09 by vchesnea          #+#    #+#             */
-/*   Updated: 2016/03/09 13:06:08 by vchesnea         ###   ########.fr       */
+/*   Updated: 2016/03/11 13:12:59 by vchesnea         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,7 @@ int			main(void)
 	setup_session();
 	while (read(0, &c, 1) > 0)
 	{
-		ft_printf("#");
+		ft_printf("##!left^");
 		if (c == 0x1b)
 		{
 			read(0, &c, 1);
@@ -83,13 +83,13 @@ int			main(void)
 			{
 				read(0, &c, 1);
 				if (c == 0x41)
-					ft_printf("#!down^");
-				else if (c == 0x43)
-					ft_printf("#!left^");
-				else if (c == 0x42)
 					ft_printf("#!up^");
-				else if (c == 0x44)
+				else if (c == 0x43)
 					ft_printf("#!right^");
+				else if (c == 0x42)
+					ft_printf("#!down^");
+				else if (c == 0x44)
+					ft_printf("#!left^");
 			}
 		}
 	}
